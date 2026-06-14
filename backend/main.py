@@ -1,3 +1,5 @@
+from video_engine.generate_voice import generate_voice
+from video_engine.generate_script import generate_video_script
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
@@ -5,6 +7,7 @@ from dotenv import load_dotenv
 import google.generativeai as genai
 import os
 import json
+from video_engine.generate_voice import generate_voice
 
 # Load environment variables
 load_dotenv()
@@ -46,6 +49,13 @@ class WeekRequest(BaseModel):
     topic: str
     week: int
 
+class VoiceRequest(BaseModel):
+    text: str
+    filename: str
+
+class VideoScriptRequest(BaseModel):
+    topic: str
+    week: int
 # Home Route
 @app.get("/")
 def home():
@@ -285,4 +295,46 @@ Return EXACTLY in this format:
         return {
             "error": str(e),
             "raw": text
+        }
+    
+@app.post("/generate-audio")
+def generate_audio(data: VoiceRequest):
+
+    try:
+
+        audio_path = generate_voice(
+            data.text,
+            data.filename
+        )
+
+        return {
+            "success": True,
+            "audio": audio_path
+        }
+
+    except Exception as e:
+
+        return {
+            "success": False,
+            "error": str(e)
+        }
+    
+@app.post("/generate-video-script")
+def generate_video(data: VideoScriptRequest):
+
+    try:
+
+        script = generate_video_script(
+            model,
+            data.topic,
+            data.week
+        )
+
+        return script
+
+    except Exception as e:
+
+        return {
+            "success": False,
+            "error": str(e)
         }
