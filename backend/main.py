@@ -1,21 +1,16 @@
+from routes.course import router as course_router
+from video_engine.storage import create_course_structure
+from video_engine.generate_slides import generate_slides
 from video_engine.generate_voice import generate_voice
 from video_engine.generate_script import generate_video_script
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-from dotenv import load_dotenv
-import google.generativeai as genai
-import os
+from services.gemini_service import get_model
 import json
 from video_engine.generate_voice import generate_voice
 
-# Load environment variables
-load_dotenv()
-
-# Configure Gemini
-genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
-
-model = genai.GenerativeModel("gemini-2.5-flash")
+model = get_model()
 
 # FastAPI App
 app = FastAPI()
@@ -56,6 +51,10 @@ class VoiceRequest(BaseModel):
 class VideoScriptRequest(BaseModel):
     topic: str
     week: int
+
+class SlidesRequest(BaseModel):
+    topic: str
+    week: int
 # Home Route
 @app.get("/")
 def home():
@@ -63,9 +62,8 @@ def home():
 
 
 # Generate Course Roadmap
-@app.post("/generate-course")
-def generate_course(data: CourseRequest):
-
+#@app.post("/generate-course")
+#def generate_course(data: CourseRequest):
     prompt = f"""
 You are an educational roadmap generator.
 
@@ -338,3 +336,35 @@ def generate_video(data: VideoScriptRequest):
             "success": False,
             "error": str(e)
         }
+    
+
+@app.post("/generate-slides")
+def generate_ppt(data: SlidesRequest):
+
+    try:
+
+        script = generate_video_script(
+            model,
+            data.topic,
+            data.week
+        )
+
+        ppt = generate_slides(
+            script,
+            data.topic,
+            data.week
+        )
+
+        return {
+            "success": True,
+            "ppt": ppt
+        }
+
+    except Exception as e:
+
+        return {
+            "success": False,
+            "error": str(e)
+        }
+    
+app.include_router(course_router)
