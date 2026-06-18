@@ -1,4 +1,3 @@
-import google.generativeai as genai
 import json
 
 
@@ -81,9 +80,22 @@ JSON Format:
 
     text = response.text.strip()
 
-    if text.startswith("```json"):
-        text = text.replace("```json", "")
-        text = text.replace("```", "")
-        text = text.strip()
+    # Remove markdown
+    text = text.replace("```json", "")
+    text = text.replace("```", "")
+    text = text.strip()
+
+    # Extract only the JSON object
+    start = text.find("{")
+    end = text.rfind("}")
+
+    if start == -1 or end == -1:
+        raise Exception("No valid JSON found in Gemini response")
+
+    text = text[start:end + 1]
+
+    print("========== GEMINI RESPONSE ==========")
+    print(text)
+    print("=====================================")
 
     return json.loads(text)

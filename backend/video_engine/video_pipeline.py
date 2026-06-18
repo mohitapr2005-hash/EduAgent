@@ -3,8 +3,21 @@ from video_engine.generate_slide_images import generate_slide_images
 from video_engine.generate_voice import generate_voice
 from video_engine.video_generator import generate_video
 
+import os
+
 
 def generate_video_pipeline(model, topic, week):
+
+    video_path = f"courses/{topic.replace(' ', '_')}/Week_{week}/video/lesson.mp4"
+
+    # If video already exists, return it immediately
+    if os.path.exists(video_path):
+        print("✅ Video already exists. Returning cached video.")
+
+        return {
+            "success": True,
+            "video": video_path
+        }
 
     print("Generating Script...")
 
@@ -14,32 +27,45 @@ def generate_video_pipeline(model, topic, week):
         week
     )
 
+    print("✅ Script Generated")
+
     print("Generating Slides...")
 
     slides = generate_slide_images(
-    script,
-    topic,
-    week
-)
+        script,
+        topic,
+        week
+    )
+
+    print("✅ Slides Generated")
+    print(slides)
 
     print("Generating Voice...")
 
     audio = generate_voice(
-        script["summary"],
-        f"{topic}_week{week}"
+        script,
+        topic,
+        week
     )
+
+    print("✅ Audio Generated")
+    print(audio)
 
     print("Generating Video...")
 
-    video_path = generate_video(
+    video = generate_video(
         slides,
         audio,
-        f"courses/{topic.replace(' ', '_')}/Week_{week}/video/lesson.mp4"
+        video_path
     )
 
+    print("✅ Video Generated")
+    print(video)
+
     return {
+        "success": True,
         "script": script,
         "slides": slides,
         "audio": audio,
-        "video": video_path
+        "video": video
     }

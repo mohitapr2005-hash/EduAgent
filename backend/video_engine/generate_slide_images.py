@@ -1,8 +1,8 @@
 from PIL import Image, ImageDraw, ImageFont
 import os
 
-WIDTH = 1280
-HEIGHT = 720
+WIDTH = 960
+HEIGHT = 540
 
 
 def generate_slide_images(script, topic, week):

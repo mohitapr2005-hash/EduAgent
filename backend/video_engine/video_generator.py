@@ -1,27 +1,32 @@
-from moviepy import ImageClip, AudioFileClip, concatenate_videoclips
+from moviepy import (
+    ImageClip,
+    AudioFileClip,
+    concatenate_videoclips
+)
+
 import os
 
 
-def generate_video(slides, audio, output_path):
-
-    audio_clip = AudioFileClip(audio)
-
-    duration_per_slide = audio_clip.duration / len(slides)
+def generate_video(slides, audio_files, output_path):
 
     clips = []
 
-    for slide in slides:
+    for slide, audio in zip(slides, audio_files):
+
+        audio_clip = AudioFileClip(audio)
 
         clip = (
             ImageClip(slide)
-            .with_duration(duration_per_slide)
+            .with_duration(audio_clip.duration)
+            .with_audio(audio_clip)
         )
 
         clips.append(clip)
 
-    final_video = concatenate_videoclips(clips)
-
-    final_video = final_video.with_audio(audio_clip)
+    final_video = concatenate_videoclips(
+        clips,
+        method="compose"
+    )
 
     os.makedirs(
         os.path.dirname(output_path),
@@ -29,8 +34,10 @@ def generate_video(slides, audio, output_path):
     )
 
     final_video.write_videofile(
-        output_path,
-        fps=24
-    )
+    output_path,
+    fps=5,
+    codec="libx264",
+    audio_codec="aac"
+)
 
     return output_path

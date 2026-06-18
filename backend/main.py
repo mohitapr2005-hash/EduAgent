@@ -5,16 +5,41 @@ from video_engine.generate_voice import generate_voice
 from video_engine.generate_script import generate_video_script
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 from services.gemini_service import get_model
 import json
 from video_engine.generate_voice import generate_voice
 from routes.video import router as video_router
 
+
 model = get_model()
 
 # FastAPI App
 app = FastAPI()
+
+model = get_model()
+
+# FastAPI App
+app = FastAPI()
+
+# Mount static files
+app.mount(
+    "/courses",
+    StaticFiles(directory="courses"),
+    name="courses"
+)
+
+app.include_router(video_router)
+
+# CORS
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 app.include_router(video_router)
 # CORS
