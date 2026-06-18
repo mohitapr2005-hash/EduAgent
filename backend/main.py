@@ -9,12 +9,14 @@ from pydantic import BaseModel
 from services.gemini_service import get_model
 import json
 from video_engine.generate_voice import generate_voice
+from routes.video import router as video_router
 
 model = get_model()
 
 # FastAPI App
 app = FastAPI()
 
+app.include_router(video_router)
 # CORS
 app.add_middleware(
     CORSMiddleware,
