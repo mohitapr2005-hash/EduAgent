@@ -1,7 +1,24 @@
 import json
+import os
 
 
 def generate_video_script(model, topic, week):
+
+    lesson_path = f"courses/{topic.replace(' ', '_')}/Week_{week}/lesson.json"
+
+    os.makedirs(os.path.dirname(lesson_path), exist_ok=True)
+
+    # -------------------------------
+    # Check Cache
+    # -------------------------------
+    if os.path.exists(lesson_path):
+
+        print("✅ Lesson already exists. Loading from cache...")
+
+        with open(lesson_path, "r") as f:
+            return json.load(f)
+
+    print("🧠 Generating lesson using Gemini...")
 
     prompt = f"""
 You are an expert professor, instructional designer, and educational video creator.
@@ -33,41 +50,28 @@ JSON Format:
 
 {{
     "title":"Lesson Title",
-
     "estimated_duration":"10 Minutes",
-
     "learning_objectives":[
         "...",
         "...",
         "..."
     ],
-
     "scenes":[
-
         {{
             "scene":1,
-
             "title":"Introduction",
-
-            "slide_title":"What is an Operating System?",
-
+            "slide_title":"Topic",
             "bullet_points":[
                 "...",
                 "...",
                 "..."
             ],
-
-            "narration":"A detailed teacher narration of around 120-180 words.",
-
-            "image_prompt":"Flat educational illustration showing a computer interacting with an operating system.",
-
+            "narration":"Narration",
+            "image_prompt":"Educational illustration",
             "duration":30
         }}
-
     ],
-
-    "summary":"Summarize the lesson in 150 words.",
-
+    "summary":"Summary",
     "assignment":[
         "...",
         "...",
@@ -80,12 +84,10 @@ JSON Format:
 
     text = response.text.strip()
 
-    # Remove markdown
     text = text.replace("```json", "")
     text = text.replace("```", "")
     text = text.strip()
 
-    # Extract only the JSON object
     start = text.find("{")
     end = text.rfind("}")
 
@@ -94,8 +96,14 @@ JSON Format:
 
     text = text[start:end + 1]
 
-    print("========== GEMINI RESPONSE ==========")
-    print(text)
-    print("=====================================")
+    lesson = json.loads(text)
 
-    return json.loads(text)
+    # -------------------------------
+    # Save Cache
+    # -------------------------------
+    with open(lesson_path, "w") as f:
+        json.dump(lesson, f, indent=4)
+
+    print("✅ Lesson Saved")
+
+    return lesson

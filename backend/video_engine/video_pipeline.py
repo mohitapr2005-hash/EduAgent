@@ -5,10 +5,17 @@ from video_engine.video_generator import generate_video
 
 import os
 
+print("🚀 LOADED video_pipeline.py")
+
 
 def generate_video_pipeline(model, topic, week):
 
+    print("INSIDE generate_video_pipeline")
+
     video_path = f"courses/{topic.replace(' ', '_')}/Week_{week}/video/lesson.mp4"
+
+    # Create folders automatically
+    os.makedirs(os.path.dirname(video_path), exist_ok=True)
 
     # If video already exists, return it immediately
     if os.path.exists(video_path):
@@ -16,7 +23,9 @@ def generate_video_pipeline(model, topic, week):
 
         return {
             "success": True,
-            "video": video_path
+            "video": video_path,
+            "video_url": f"http://127.0.0.1:8000/{video_path}",
+            "cached": True
         }
 
     print("Generating Script...")
@@ -38,7 +47,6 @@ def generate_video_pipeline(model, topic, week):
     )
 
     print("✅ Slides Generated")
-    print(slides)
 
     print("Generating Voice...")
 
@@ -49,7 +57,6 @@ def generate_video_pipeline(model, topic, week):
     )
 
     print("✅ Audio Generated")
-    print(audio)
 
     print("Generating Video...")
 
@@ -60,12 +67,17 @@ def generate_video_pipeline(model, topic, week):
     )
 
     print("✅ Video Generated")
-    print(video)
 
-    return {
+    response = {
         "success": True,
         "script": script,
         "slides": slides,
         "audio": audio,
-        "video": video
+        "video": video,
+        "video_url": f"http://127.0.0.1:8000/{video}",
+        "cached": False
     }
+
+    print(response)
+
+    return response

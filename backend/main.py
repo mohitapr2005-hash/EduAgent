@@ -1,55 +1,46 @@
-from routes.course import router as course_router
-from video_engine.storage import create_course_structure
-from video_engine.generate_slides import generate_slides
-from video_engine.generate_voice import generate_voice
-from video_engine.generate_script import generate_video_script
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
-from services.gemini_service import get_model
-import json
 from video_engine.generate_voice import generate_voice
+from video_engine.generate_script import generate_video_script
+from video_engine.generate_slides import generate_slides
+
+from services.gemini_service import get_model
+
+from routes.course import router as course_router
 from routes.video import router as video_router
 
+import json
 
 model = get_model()
 
-# FastAPI App
 app = FastAPI()
 
-model = get_model()
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "http://localhost:5173",
+        "http://127.0.0.1:5173",
+    ],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
-# FastAPI App
-app = FastAPI()
-
-# Mount static files
 app.mount(
     "/courses",
     StaticFiles(directory="courses"),
     name="courses"
 )
 
-app.include_router(video_router)
-
-# CORS
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+app.include_router(course_router)
+print("✅ Course router included")
 
 app.include_router(video_router)
+print("✅ Video router included")
+
 # CORS
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
 
 # Request Models
 class CourseRequest(BaseModel):
@@ -394,4 +385,9 @@ def generate_ppt(data: SlidesRequest):
             "error": str(e)
         }
     
-app.include_router(course_router)
+print("\n========== REGISTERED ROUTES ==========")
+
+for route in app.routes:
+    print(route.path)
+
+print("=======================================\n")

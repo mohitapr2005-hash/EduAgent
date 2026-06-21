@@ -22,6 +22,14 @@ def generate_voice(script, topic, week):
             f"scene_{scene['scene']}.mp3"
         )
 
+        # ✅ Cache Check
+        if os.path.exists(filename):
+            print(f"🎤 Using cached audio: {filename}")
+            audio_files.append(filename)
+            continue
+
+        print(f"🎤 Generating audio for Scene {scene['scene']}")
+
         tts = gTTS(
             text=scene["narration"],
             lang="en"

@@ -1,4 +1,5 @@
 from PIL import Image, ImageDraw, ImageFont
+from PIL import Image, ImageDraw, ImageFont
 import os
 
 WIDTH = 960
@@ -27,6 +28,19 @@ def generate_slide_images(script, topic, week):
 
     for scene in script["scenes"]:
 
+        filename = os.path.join(
+            folder,
+            f"slide_{scene['scene']}.png"
+        )
+
+        # ✅ Cache check
+        if os.path.exists(filename):
+            print(f"✅ Using cached slide: {filename}")
+            files.append(filename)
+            continue
+
+        print(f"🖼 Generating slide {scene['scene']}")
+
         img = Image.new("RGB", (WIDTH, HEIGHT), "#0f172a")
         draw = ImageDraw.Draw(img)
 
@@ -49,11 +63,6 @@ def generate_slide_images(script, topic, week):
             )
 
             y += 60
-
-        filename = os.path.join(
-            folder,
-            f"slide_{scene['scene']}.png"
-        )
 
         img.save(filename)
 

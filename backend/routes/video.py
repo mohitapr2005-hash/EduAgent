@@ -11,8 +11,14 @@ model = get_model()
 @router.post("/generate-video")
 def generate_video(data: VideoScriptRequest):
 
-    return generate_video_pipeline(
+    result = generate_video_pipeline(
         model,
         data.topic,
         data.week
     )
+
+    print("========== ROUTE RESULT ==========")
+    print(result)
+    print("==================================")
+
+    return result

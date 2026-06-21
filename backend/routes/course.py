@@ -1,12 +1,14 @@
+
 from fastapi import APIRouter
 from schemas.course import CourseRequest
 from services.gemini_service import get_model
+print("🚀 COURSE ROUTE LOADED")
 
 router = APIRouter()
 
 model = get_model()
 
-
+print("About to register generate-course")
 @router.post("/generate-course")
 def generate_course(data: CourseRequest):
 
@@ -42,3 +44,5 @@ Return ONLY valid JSON:
 
     import json
     return json.loads(text)
+
+print("Course router routes:", router.routes)
