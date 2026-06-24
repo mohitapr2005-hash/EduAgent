@@ -65,5 +65,24 @@ export const generateWeekLessonAPI = async (topic, week) => {
     }),
   });
 
+
   return await response.json();
 };
+
+// Generate Video
+export const generateVideoAPI = async (topic, week) => {
+
+  const response = await fetch(`${BASE_URL}/generate-video`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      topic,
+      week,
+    }),
+  });
+
+  return await response.json();
+};
+

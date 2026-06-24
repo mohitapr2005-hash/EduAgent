@@ -3,101 +3,198 @@ function Roadmap({
   lesson,
   selectedWeek,
   generateWeekLesson,
+  generateVideo,
 }) {
   if (!roadmap?.weeks) return null;
 
   return (
     <>
-      <h2 className="text-3xl font-bold mt-8 mb-2">
-        {roadmap.title}
-      </h2>
+      <div className="mb-8">
 
-      <p className="mb-6">
-        <strong>Duration:</strong> {roadmap.duration}
-      </p>
+        <h1 className="text-4xl font-extrabold mb-2">
+          📚 {roadmap.title}
+        </h1>
+
+        <p className="text-gray-400 text-lg">
+          Duration: {roadmap.duration}
+        </p>
+
+      </div>
 
       {roadmap.weeks.map((week) => (
+
         <div
           key={week.week}
-          className="bg-slate-800/50 backdrop-blur-md p-6 rounded-2xl shadow-xl mb-4"
+          className="bg-slate-900 border border-slate-700 rounded-3xl p-8 mb-6 shadow-xl hover:border-cyan-500 hover:shadow-cyan-500/20 transition-all duration-300"
         >
-          <h3 className="text-xl font-bold">
-            Week {week.week}
-          </h3>
 
-          <ul className="list-disc ml-6 mt-3">
-            {week.topics.map((topic, index) => (
-              <li key={index}>{topic}</li>
-            ))}
-          </ul>
+          <div className="flex justify-between items-center">
 
-          <button
-            onClick={() => generateWeekLesson(week.week)}
-            className="mt-4 bg-indigo-600 hover:bg-indigo-700 px-4 py-2 rounded-lg"
-          >
-            📖 Open Lesson
-          </button>
-
-          {selectedWeek === week.week && lesson && (
-            <div className="bg-slate-700 p-6 rounded-xl mt-4">
+            <div>
 
               <h2 className="text-2xl font-bold">
+                📘 Week {week.week}
+              </h2>
+
+              <p className="text-gray-400 mt-2">
+                {week.title || "AI Generated Lesson"}
+              </p>
+
+            </div>
+
+            <div className="bg-cyan-600 text-white px-4 py-2 rounded-full text-sm font-semibold">
+              {week.topics.length} Topics
+            </div>
+
+          </div>
+
+          <div className="mt-6">
+
+            <ul className="space-y-3">
+
+              {week.topics.map((topic, index) => (
+
+                <li
+                  key={index}
+                  className="text-gray-300"
+                >
+                  ✅ {topic}
+                </li>
+
+              ))}
+
+            </ul>
+
+          </div>
+
+          <div className="flex gap-4 mt-8">
+
+            <button
+              onClick={() => generateWeekLesson(week.week)}
+              className="flex-1 bg-indigo-600 hover:bg-indigo-700 py-3 rounded-xl font-semibold transition"
+            >
+              📖 Read Lesson
+            </button>
+
+            <button
+              onClick={() => generateVideo(week.week)}
+              className="flex-1 bg-red-600 hover:bg-red-700 py-3 rounded-xl font-semibold transition"
+            >
+              ▶ Watch Video
+            </button>
+
+          </div>
+
+          {selectedWeek === week.week && lesson && (
+
+            <div className="mt-8 border-t border-slate-700 pt-8">
+
+              <h2 className="text-3xl font-bold mb-2">
                 {lesson.title}
               </h2>
 
-              <p>{lesson.duration}</p>
-
-              <h3 className="mt-4 font-bold">
-                Learning Outcomes
-              </h3>
-
-              <ul>
-                {lesson.learning_outcomes?.map((item, index) => (
-                  <li key={index}>{item}</li>
-                ))}
-              </ul>
-
-              <h3 className="mt-4 font-bold">
-                Lesson
-              </h3>
-
-              <p className="whitespace-pre-wrap">
-                {lesson.lesson}
+              <p className="text-cyan-400 mb-6">
+                ⏱ {lesson.duration}
               </p>
 
-              <h3 className="mt-4 font-bold">
-                Examples
-              </h3>
+              <div className="space-y-8">
 
-              <ul>
-                {lesson.examples?.map((item, index) => (
-                  <li key={index}>{item}</li>
-                ))}
-              </ul>
+                <div>
 
-              <h3 className="mt-4 font-bold">
-                Assignment
-              </h3>
+                  <h3 className="text-xl font-bold mb-3">
+                    🎯 Learning Outcomes
+                  </h3>
 
-              <ul>
-                {lesson.assignment?.map((item, index) => (
-                  <li key={index}>{item}</li>
-                ))}
-              </ul>
+                  <ul className="space-y-2">
 
-              <h3 className="mt-4 font-bold">
-                Summary
-              </h3>
+                    {lesson.learning_outcomes?.map((item, index) => (
 
-              <p>{lesson.summary}</p>
+                      <li key={index}>
+                        ✅ {item}
+                      </li>
+
+                    ))}
+
+                  </ul>
+
+                </div>
+
+                <div>
+
+                  <h3 className="text-xl font-bold mb-3">
+                    📚 Lesson
+                  </h3>
+
+                  <p className="whitespace-pre-wrap leading-8 text-gray-300">
+                    {lesson.lesson}
+                  </p>
+
+                </div>
+
+                <div>
+
+                  <h3 className="text-xl font-bold mb-3">
+                    💡 Examples
+                  </h3>
+
+                  <ul className="space-y-2">
+
+                    {lesson.examples?.map((item, index) => (
+
+                      <li key={index}>
+                        🔹 {item}
+                      </li>
+
+                    ))}
+
+                  </ul>
+
+                </div>
+
+                <div>
+
+                  <h3 className="text-xl font-bold mb-3">
+                    📝 Assignment
+                  </h3>
+
+                  <ul className="space-y-2">
+
+                    {lesson.assignment?.map((item, index) => (
+
+                      <li key={index}>
+                        📌 {item}
+                      </li>
+
+                    ))}
+
+                  </ul>
+
+                </div>
+
+                <div>
+
+                  <h3 className="text-xl font-bold mb-3">
+                    📌 Summary
+                  </h3>
+
+                  <p className="text-gray-300 leading-8">
+                    {lesson.summary}
+                  </p>
+
+                </div>
+
+              </div>
 
             </div>
+
           )}
 
         </div>
+
       ))}
+
     </>
   );
 }
 
-export default Roadmap;
+export default Roadmap; 
