@@ -1,3 +1,7 @@
+import firebase_admin_config
+from database.database import get_db
+from sqlalchemy.orm import Session
+from fastapi import Depends
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
@@ -7,7 +11,7 @@ from video_engine.generate_script import generate_video_script
 from video_engine.generate_slides import generate_slides
 
 from services.gemini_service import get_model
-
+from routes.auth import router as auth_router
 from routes.course import router as course_router
 from routes.video import router as video_router
 
@@ -39,6 +43,8 @@ print("✅ Course router included")
 
 app.include_router(video_router)
 print("✅ Video router included")
+
+app.include_router(auth_router)
 
 # CORS
 
