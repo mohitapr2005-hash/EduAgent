@@ -1,7 +1,9 @@
 import firebase_admin_config
 from database.database import get_db
 from sqlalchemy.orm import Session
+from routes.progress import router as progress_router
 from fastapi import Depends
+from routes.progress import router as progress_router
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
@@ -14,6 +16,7 @@ from services.gemini_service import get_model
 from routes.auth import router as auth_router
 from routes.course import router as course_router
 from routes.video import router as video_router
+from routes.certificate import router as certificate_router
 
 import json
 
@@ -45,6 +48,9 @@ app.include_router(video_router)
 print("✅ Video router included")
 
 app.include_router(auth_router)
+app.include_router(progress_router)
+app.include_router(certificate_router)
+
 
 # CORS
 
