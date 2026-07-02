@@ -1,19 +1,36 @@
+import { downloadCertificateAPI } from "../services/api";
 function ProgressCard({
 
     roadmap,
-    selectedWeek,
+    completedWeek,
+    courseId,
 
 }) {
+    
 
     if (!roadmap) return null;
-
+    const completed = completedWeek;
     const totalWeeks = roadmap.weeks.length;
-
-    const completed = selectedWeek || 0;
 
     const progress = Math.round(
         (completed / totalWeeks) * 100
     );
+
+    const downloadCertificate = async () => {
+
+    try {
+
+        await downloadCertificateAPI(courseId);
+
+    } catch (error) {
+
+        console.error(error);
+
+        alert(error.message);
+
+    }
+
+};
 
     return (
 
@@ -77,10 +94,28 @@ function ProgressCard({
                 </div>
 
             </div>
+            
 
-        </div>
+        <div className="mt-8 space-y-4">
 
-    );
+    ...
+
+</div>
+
+{progress === 100 && (
+
+    <button
+        onClick={downloadCertificate}
+        className="w-full mt-8 bg-yellow-500 hover:bg-yellow-600 text-black font-bold py-3 rounded-xl"
+    >
+        🏆 Download Certificate
+    </button>
+
+)}
+
+</div>
+
+);
 
 }
 

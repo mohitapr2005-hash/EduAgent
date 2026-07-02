@@ -1,11 +1,36 @@
+import { completeWeekAPI } from "../services/api";
+
 function Roadmap({
   roadmap,
+  courseId,
+  completedWeek,
+  setCompletedWeek,
   lesson,
   selectedWeek,
   generateWeekLesson,
   generateVideo,
 }) {
   if (!roadmap?.weeks) return null;
+
+const markComplete = async (week) => {
+
+    try {
+
+        await completeWeekAPI(courseId, week);
+
+        setCompletedWeek(week);
+
+        alert(`Week ${week} completed! 🎉`);
+
+    } catch (error) {
+
+        console.error(error);
+
+        alert("Failed to save progress");
+
+    }
+
+};
 
   return (
     <>
@@ -67,23 +92,30 @@ function Roadmap({
 
           </div>
 
-          <div className="flex gap-4 mt-8">
+         <div className="flex gap-4 mt-8">
 
-            <button
-              onClick={() => generateWeekLesson(week.week)}
-              className="flex-1 bg-indigo-600 hover:bg-indigo-700 py-3 rounded-xl font-semibold transition"
-            >
-              📖 Read Lesson
-            </button>
+    <button
+      onClick={() => generateWeekLesson(week.week)}
+      className="flex-1 bg-indigo-600 hover:bg-indigo-700 py-3 rounded-xl font-semibold transition"
+    >
+      📖 Read Lesson
+    </button>
 
-            <button
-              onClick={() => generateVideo(week.week)}
-              className="flex-1 bg-red-600 hover:bg-red-700 py-3 rounded-xl font-semibold transition"
-            >
-              ▶ Watch Video
-            </button>
+    <button
+      onClick={() => generateVideo(week.week)}
+      className="flex-1 bg-red-600 hover:bg-red-700 py-3 rounded-xl font-semibold transition"
+    >
+      ▶ Watch Video
+    </button>
 
-          </div>
+    <button
+      onClick={() => markComplete(week.week)}
+      className="flex-1 bg-green-600 hover:bg-green-700 py-3 rounded-xl font-semibold transition"
+    >
+      ✅ Mark Complete
+    </button>
+
+</div>
 
           {selectedWeek === week.week && lesson && (
 

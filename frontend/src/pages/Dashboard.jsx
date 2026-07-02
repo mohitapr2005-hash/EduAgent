@@ -1,6 +1,6 @@
 
 import VideoPlayer from "../components/VideoPlayer";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Navbar from "../components/Navbar";
 import CourseGenerator from "../components/CourseGenerator";
 import Roadmap from "../components/Roadmap";
@@ -21,6 +21,7 @@ import {
 
 function Dashboard() {
 
+
 const [selectedWeek, setSelectedWeek] = useState(null);
 
 const [lesson, setLesson] = useState(null);
@@ -31,6 +32,8 @@ const [videoLoading, setVideoLoading] = useState(false);
 
 const [topic, setTopic] = useState("");
 const [roadmap, setRoadmap] = useState(null);
+const [courseId, setCourseId] = useState(null);
+const [completedWeek, setCompletedWeek] = useState(0);
 const [loading, setLoading] = useState(false);
 
 const [question, setQuestion] = useState("");
@@ -45,6 +48,21 @@ const [score, setScore] = useState(null);
 const [notesTopic, setNotesTopic] = useState("");
 const [notes, setNotes] = useState("");
 
+
+useEffect(() => {
+
+  const savedRoadmap = localStorage.getItem("selectedRoadmap");
+
+  if (savedRoadmap) {
+
+    setRoadmap(JSON.parse(savedRoadmap));
+
+    localStorage.removeItem("selectedRoadmap");
+
+  }
+
+}, []);
+
 const generateCourse = async () => {
 
     if (!topic.trim()) {
@@ -56,9 +74,15 @@ const generateCourse = async () => {
 
         setLoading(true);
 
+        console.log("Calling backend...");
+
         const data = await generateCourseAPI(topic);
 
-        setRoadmap(data);
+        console.log("DATA FROM BACKEND:", data);
+
+        setCourseId(data.course_id);
+
+        setRoadmap(data.roadmap);
 
     } catch (error) {
 
@@ -247,13 +271,16 @@ return (
 
             <div>
 
-                <Roadmap
-                    roadmap={roadmap}
-                    lesson={lesson}
-                    selectedWeek={selectedWeek}
-                    generateWeekLesson={generateWeekLesson}
-                    generateVideo={generateVideo}
-                />
+<Roadmap
+    roadmap={roadmap}
+    courseId={courseId}
+    completedWeek={completedWeek}
+    setCompletedWeek={setCompletedWeek}
+    lesson={lesson}
+    selectedWeek={selectedWeek}
+    generateWeekLesson={generateWeekLesson}
+    generateVideo={generateVideo}
+/>
 
             </div>
 
@@ -275,7 +302,8 @@ return (
 
                 <ProgressCard
     roadmap={roadmap}
-    selectedWeek={selectedWeek}
+    completedWeek={completedWeek}
+    courseId={courseId}
 />
 
             </div>

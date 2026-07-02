@@ -1,5 +1,5 @@
 import { logout } from "../services/auth";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 function Navbar() {
 
@@ -39,12 +39,30 @@ function Navbar() {
 
       </div>
 
-      <button
-        onClick={handleLogout}
-        className="bg-red-600 hover:bg-red-700 px-5 py-3 rounded-lg font-semibold"
-      >
-        Logout
-      </button>
+      <div className="flex gap-4">
+
+  <Link
+    to="/"
+    className="bg-blue-600 hover:bg-blue-700 px-5 py-3 rounded-lg font-semibold"
+  >
+    Dashboard
+  </Link>
+
+  <Link
+    to="/my-courses"
+    className="bg-green-600 hover:bg-green-700 px-5 py-3 rounded-lg font-semibold"
+  >
+    My Courses
+  </Link>
+
+  <button
+    onClick={handleLogout}
+    className="bg-red-600 hover:bg-red-700 px-5 py-3 rounded-lg font-semibold"
+  >
+    Logout
+  </button>
+
+</div>
 
     </div>
 

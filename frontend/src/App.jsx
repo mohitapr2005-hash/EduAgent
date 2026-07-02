@@ -1,6 +1,6 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import { useContext } from "react";
-
+import MyCourses from "./pages/MyCourses";
 import { AuthContext } from "./context/AuthContext";
 
 import Dashboard from "./pages/Dashboard";
@@ -28,7 +28,7 @@ function App() {
         path="/"
         element={user ? <Dashboard /> : <Navigate to="/login" />}
       />
-
+      <Route path="/my-courses" element={<MyCourses />} />
     </Routes>
   );
 
