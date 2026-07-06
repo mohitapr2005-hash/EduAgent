@@ -134,11 +134,15 @@ class Progress(Base):
         ForeignKey("courses.id")
     )
 
-    completed_week = Column(Integer)
+    completed_week = Column(
+        Integer,
+        default=0
+    )
 
     last_opened = Column(
         DateTime(timezone=True),
-        server_default=func.now()
+        server_default=func.now(),
+        onupdate=func.now()
     )
 
     course = relationship(
@@ -192,4 +196,29 @@ class Video(Base):
     course = relationship(
         "Course",
         back_populates="videos"
+    )
+
+    # ==========================
+# INTERVIEWS
+# ==========================
+
+class Interview(Base):
+    __tablename__ = "interviews"
+
+    id = Column(Integer, primary_key=True)
+
+    user_id = Column(
+        Integer,
+        ForeignKey("users.id")
+    )
+
+    topic = Column(String)
+
+    score = Column(Integer)
+
+    feedback = Column(Text)
+
+    created_at = Column(
+        DateTime(timezone=True),
+        server_default=func.now()
     )

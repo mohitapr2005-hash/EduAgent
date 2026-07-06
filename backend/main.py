@@ -1,7 +1,6 @@
 import firebase_admin_config
 from database.database import get_db
 from sqlalchemy.orm import Session
-from routes.progress import router as progress_router
 from fastapi import Depends
 from routes.progress import router as progress_router
 from fastapi import FastAPI
@@ -11,12 +10,23 @@ from pydantic import BaseModel
 from video_engine.generate_voice import generate_voice
 from video_engine.generate_script import generate_video_script
 from video_engine.generate_slides import generate_slides
-
 from services.gemini_service import get_model
 from routes.auth import router as auth_router
 from routes.course import router as course_router
 from routes.video import router as video_router
 from routes.certificate import router as certificate_router
+from routes.study_plan import router as study_plan_router
+from routes.dashboard import router as dashboard_router
+from routes.continue_learning import router as continue_learning_router
+from routes.tutor import router as tutor_router
+from routes.quiz import router as quiz_router
+from routes.notes import router as notes_router
+from routes.lesson import router as lesson_router
+from routes.interview import router as interview_router
+from routes.interview_history import router as interview_history_router
+from routes.interview_history_view import router as interview_history_view_router
+from routes.resume import router as resume_router
+
 
 import json
 
@@ -50,7 +60,17 @@ print("✅ Video router included")
 app.include_router(auth_router)
 app.include_router(progress_router)
 app.include_router(certificate_router)
-
+app.include_router(study_plan_router)
+app.include_router(dashboard_router)
+app.include_router(quiz_router)
+app.include_router(continue_learning_router)
+app.include_router(tutor_router)
+app.include_router(notes_router)
+app.include_router(lesson_router)
+app.include_router(interview_router)
+app.include_router(interview_history_router)
+app.include_router(interview_history_view_router)
+app.include_router(resume_router)
 
 # CORS
 
@@ -146,183 +166,6 @@ If it IS a learnable topic, return ONLY valid JSON in this format:
         return {
             "success": False,
             "error": str(e)
-        }
-
-
-# Ask AI Tutor
-@app.post("/ask-doubt")
-def ask_doubt(data: DoubtRequest):
-
-    prompt = f"""
-Explain the following concept in a simple way for a B.Tech student:
-
-{data.question}
-
-Include:
-- Simple explanation
-- Example
-- Interview tip
-"""
-
-    try:
-        response = model.generate_content(prompt)
-
-        return {
-            "answer": response.text
-        }
-
-    except Exception as e:
-        return {
-            "answer": f"Error: {str(e)}"
-        }
-
-
-# Generate Quiz
-@app.post("/generate-quiz")
-def generate_quiz(data: QuizRequest):
-
-    prompt = f"""
-Create 5 multiple-choice questions (MCQs) on {data.topic}.
-
-Return ONLY valid JSON in this format:
-
-{{
-  "questions": [
-    {{
-      "question": "Question here",
-      "options": [
-        "Option A",
-        "Option B",
-        "Option C",
-        "Option D"
-      ],
-      "answer": "Option A"
-    }}
-  ]
-}}
-"""
-
-    try:
-        response = model.generate_content(prompt)
-
-        text = response.text.strip()
-
-        if text.startswith("```json"):
-            text = text.replace("```json", "")
-            text = text.replace("```", "")
-            text = text.strip()
-
-        quiz = json.loads(text)
-
-        return quiz
-
-    except Exception as e:
-        return {
-            "error": str(e)
-        }
-
-
-# Generate Notes
-@app.post("/generate-notes")
-def generate_notes(data: NotesRequest):
-
-    prompt = f"""
-Create concise study notes on {data.topic}.
-
-Include:
-- Introduction
-- Key Concepts
-- Important Points
-- Real-world Example
-- Interview Questions
-
-Keep it beginner-friendly.
-"""
-
-    try:
-        response = model.generate_content(prompt)
-
-        return {
-            "notes": response.text
-        }
-
-    except Exception as e:
-        return {
-            "notes": f"Error: {str(e)}"
-        }
-    
-    # Generate Weekly Lesson
-@app.post("/generate-week")
-def generate_week(data: WeekRequest):
-
-    prompt = f"""
-You are an expert university professor.
-
-Create a COMPLETE lesson for Week {data.week}
-of a 12-week course on:
-
-{data.topic}
-
-IMPORTANT RULES:
-- Return ONLY JSON.
-- No markdown.
-- No ```json.
-- No explanations before or after JSON.
-- Escape all quotation marks inside strings.
-- Every key/value must be valid JSON.
-- lesson should be plain text only.
-
-Return EXACTLY in this format:
-
-{{
-  "title": "Lesson Title",
-  "duration": "45 Minutes",
-  "learning_outcomes": [
-    "Outcome 1",
-    "Outcome 2",
-    "Outcome 3"
-  ],
-  "lesson": "Detailed lesson...",
-  "examples": [
-    "Example 1",
-    "Example 2",
-    "Example 3"
-  ],
-  "assignment": [
-    "Question 1",
-    "Question 2",
-    "Question 3"
-  ],
-  "summary": "Short summary"
-}}
-"""
-
-    try:
-        response = model.generate_content(prompt)
-
-        text = response.text.strip()
-
-        print("=" * 100)
-        print(text)
-        print("=" * 100)
-
-        # Remove markdown
-        if text.startswith("```"):
-            text = text.replace("```json", "")
-            text = text.replace("```", "")
-            text = text.strip()
-
-        lesson = json.loads(text)
-
-        return lesson
-
-    except Exception as e:
-        print("JSON ERROR")
-        print(text)
-
-        return {
-            "error": str(e),
-            "raw": text
         }
     
 @app.post("/generate-audio")
