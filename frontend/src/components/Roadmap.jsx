@@ -1,4 +1,8 @@
-import { completeWeekAPI } from "../services/api";
+import {
+    completeWeekAPI,
+    getProgressAPI
+} from "../services/api";
+import toast from "react-hot-toast";
 
 function Roadmap({
   roadmap,
@@ -6,30 +10,63 @@ function Roadmap({
   completedWeek,
   setCompletedWeek,
   lesson,
+  setLesson,
   selectedWeek,
+  setSelectedWeek,
   generateWeekLesson,
   generateVideo,
-}) {
-  if (!roadmap?.weeks) return null;
+  lessonLoading,
+}){
+  if (!roadmap?.weeks) {
+
+    return (
+
+        <div className="bg-slate-900 border border-slate-700 rounded-3xl p-12 shadow-xl min-h-[430px] flex items-center justify-center">
+
+            <div className="text-center">
+
+                <div className="text-7xl mb-6">
+                    📚
+                </div>
+
+                <h2 className="text-3xl font-bold mb-4">
+                    No Course Generated Yet
+                </h2>
+
+                <p className="text-slate-400 max-w-xl mx-auto leading-8">
+
+                    Enter any topic above and EduAgent AI will create a
+                    complete learning roadmap with weekly lessons,
+                    quizzes, notes and AI videos.
+
+                </p>
+
+            </div>
+
+        </div>
+
+    );
+
+}
 
 const markComplete = async (week) => {
-
     try {
 
         await completeWeekAPI(courseId, week);
 
-        setCompletedWeek(week);
+        const progress = await getProgressAPI(courseId);
 
-        alert(`Week ${week} completed! 🎉`);
+        console.log("Progress:", progress);
 
-    } catch (error) {
+        setCompletedWeek(progress.completed_week);
 
-        console.error(error);
+        toast.success("Week completed");
 
-        alert("Failed to save progress");
+    } catch (err) {
+
+        console.error(err);
 
     }
-
 };
 
   return (
@@ -95,11 +132,12 @@ const markComplete = async (week) => {
          <div className="flex gap-4 mt-8">
 
     <button
-      onClick={() => generateWeekLesson(week.week)}
-      className="flex-1 bg-indigo-600 hover:bg-indigo-700 py-3 rounded-xl font-semibold transition"
-    >
-      📖 Read Lesson
-    </button>
+  onClick={() => generateWeekLesson(week.week)}
+  disabled={lessonLoading}
+  className="flex-1 bg-indigo-600 hover:bg-indigo-700 py-3 rounded-xl font-semibold transition disabled:opacity-50 disabled:cursor-not-allowed"
+>
+  {lessonLoading ? "⏳ Generating Lesson..." : "📖 Read Lesson"}
+</button>
 
     <button
       onClick={() => generateVideo(week.week)}
@@ -109,17 +147,35 @@ const markComplete = async (week) => {
     </button>
 
     <button
-      onClick={() => markComplete(week.week)}
-      className="flex-1 bg-green-600 hover:bg-green-700 py-3 rounded-xl font-semibold transition"
-    >
-      ✅ Mark Complete
-    </button>
+    onClick={() => markComplete(week.week)}
+    disabled={completedWeek >= week.week}
+    className={`flex-1 py-3 rounded-xl font-semibold transition ${
+        completedWeek >= week.week
+            ? "bg-green-800 cursor-not-allowed"
+            : "bg-green-600 hover:bg-green-700"
+    }`}
+>
+    {completedWeek >= week.week
+        ? "✔ Completed"
+        : "✅ Mark Complete"}
+</button>
 
 </div>
 
           {selectedWeek === week.week && lesson && (
 
             <div className="mt-8 border-t border-slate-700 pt-8">
+              <div className="flex justify-end mb-4">
+  <button
+    onClick={() => {
+      setSelectedWeek(null);
+      setLesson(null);
+    }}
+    className="bg-red-600 hover:bg-red-700 px-4 py-2 rounded-lg text-white font-semibold transition"
+  >
+    ✖ Close Lesson
+  </button>
+</div>
 
               <h2 className="text-3xl font-bold mb-2">
                 {lesson.title}

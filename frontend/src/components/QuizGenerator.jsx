@@ -7,6 +7,7 @@ function QuizGenerator({
   setSelectedAnswers,
   submitQuiz,
   score,
+  loading,
 }) {
   return (
     <>
@@ -25,11 +26,12 @@ function QuizGenerator({
           />
 
           <button
-            onClick={generateQuiz}
-            className="bg-green-600 hover:bg-green-700 px-6 py-3 rounded-lg font-semibold"
-          >
-            Generate Quiz
-          </button>
+    onClick={generateQuiz}
+    disabled={loading}
+    className="bg-green-600 hover:bg-green-700 disabled:opacity-60 disabled:cursor-not-allowed px-6 py-3 rounded-lg font-semibold transition"
+>
+    {loading ? "📝 Generating..." : "Generate Quiz"}
+</button>
         </div>
       </div>
 
@@ -48,16 +50,17 @@ function QuizGenerator({
                 <div key={i}>
                   <label>
                     <input
-                      type="radio"
-                      name={`question-${index}`}
-                      value={option}
-                      onChange={() =>
-                        setSelectedAnswers({
-                          ...selectedAnswers,
-                          [index]: option,
-                        })
-                      }
-                    />
+  type="radio"
+  name={`question-${index}`}
+  value={option}
+  checked={selectedAnswers[index] === option}
+  onChange={() =>
+    setSelectedAnswers({
+      ...selectedAnswers,
+      [index]: option,
+    })
+  }
+/>
                     {" "}
                     {option}
                   </label>

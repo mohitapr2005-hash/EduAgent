@@ -5,7 +5,7 @@ function VideoPlayer({
 
   if (loading) {
   return (
-    <div className="bg-slate-900 border border-slate-700 rounded-3xl p-8 shadow-xl">
+    <div className="bg-slate-900 border border-slate-700 rounded-3xl p-8 shadow-xl h-full">
 
       <h2 className="text-2xl font-bold mb-6">
         🎥 Generating AI Video
@@ -30,25 +30,25 @@ function VideoPlayer({
 }
   if (!videoUrl) {
     return (
-      <div className="bg-slate-900 border border-slate-700 rounded-3xl p-8 shadow-xl">
+      <div className="bg-slate-900 border border-slate-700 rounded-3xl p-8 shadow-xl min-h-[430px]">
 
         <h2 className="text-2xl font-bold mb-6">
           🎥 AI Video Lesson
         </h2>
 
-        <div className="aspect-video rounded-2xl bg-slate-800 flex items-center justify-center">
+        <div className="aspect-video rounded-3xl bg-gradient-to-br from-slate-800 to-slate-900 border border-slate-700 flex items-center justify-center">
 
           <div className="text-center">
 
-            <div className="text-6xl mb-4">
+            <div className="text-8xl mb-6 animate-pulse">
               🎬
             </div>
 
-            <h3 className="text-xl font-semibold text-gray-300">
+            <h3 className="text-3xl font-bold text-white">
               No Video Generated Yet
             </h3>
 
-            <p className="text-gray-500 mt-2">
+            <p className="text-slate-400 mt-4 leading-7 max-w-sm mx-auto">
               Click "Watch Video" from any week to generate an AI lesson.
             </p>
 
@@ -61,7 +61,7 @@ function VideoPlayer({
   }
 
   return (
-    <div className="bg-slate-900 border border-slate-700 rounded-3xl p-8 shadow-xl">
+    <div className="bg-slate-900 border border-slate-700 rounded-3xl p-8 shadow-xl min-h-[430px]">
 
       <div className="flex justify-between items-center mb-6">
 
@@ -80,7 +80,7 @@ function VideoPlayer({
         <a
           href={videoUrl}
           download
-          className="bg-cyan-600 hover:bg-cyan-700 px-5 py-3 rounded-xl font-semibold transition"
+          className="bg-gradient-to-r from-cyan-500 to-blue-600 hover:scale-105 px-6 py-3 rounded-xl font-bold transition-all duration-300"
         >
           ⬇ Download
         </a>
@@ -88,11 +88,11 @@ function VideoPlayer({
       </div>
 
       <video
-        src={videoUrl}
-        controls
-        controlsList="nodownload"
-        className="w-full rounded-2xl border border-slate-700 shadow-lg"
-      />
+    src={videoUrl}
+    controls
+    controlsList="nodownload"
+    className="w-full h-[420px] object-cover rounded-2xl border border-slate-700 shadow-lg"
+/>
 
     </div>
   );

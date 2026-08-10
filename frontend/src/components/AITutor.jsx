@@ -3,43 +3,84 @@ function AITutor({
   setQuestion,
   askDoubt,
   answer,
+  loading,
 }) {
   return (
-    <div className="bg-slate-800/50 backdrop-blur-md p-6 rounded-2xl shadow-xl mb-8">
-      <h2 className="text-2xl font-bold mb-4">
-        🤖 AI Tutor
-      </h2>
 
-      <div className="flex gap-4">
-        <input
-          type="text"
-          placeholder="Ask any question..."
-          value={question}
-          onChange={(e) => setQuestion(e.target.value)}
-          className="flex-1 p-3 rounded-lg bg-slate-700 text-white border border-slate-600"
-        />
+<div className="bg-slate-900 border border-slate-700 rounded-3xl p-8 shadow-xl">
 
-        <button
-          onClick={askDoubt}
-          className="bg-purple-600 hover:bg-purple-700 px-6 py-3 rounded-lg font-semibold"
-        >
-          Ask AI
-        </button>
-      </div>
+    
 
-      {answer && (
-        <div className="mt-6 bg-slate-900 p-4 rounded-lg">
-          <h3 className="font-bold mb-2">
-            Answer
-          </h3>
+    
 
-          <p className="whitespace-pre-wrap">
-            {answer}
-          </p>
+    <textarea
+        rows={4}
+        value={question}
+        onChange={(e)=>setQuestion(e.target.value)}
+        placeholder="💬 Ask AI anything..."
+        className="w-full bg-slate-800 rounded-xl p-5 border border-slate-700 resize-none outline-none focus:border-cyan-500"
+    />
+
+    <div className="mt-6">
+
+        <p className="text-sm text-slate-400 mb-3">
+            Example Questions
+        </p>
+
+        <div className="flex flex-wrap gap-3">
+
+            <button
+                onClick={()=>setQuestion("Explain today's lesson in simple words")}
+                className="bg-slate-800 hover:bg-slate-700 px-4 py-2 rounded-full"
+            >
+                📚 Explain lesson
+            </button>
+
+            <button
+                onClick={()=>setQuestion("Generate interview questions")}
+                className="bg-slate-800 hover:bg-slate-700 px-4 py-2 rounded-full"
+            >
+                💼 Interview Questions
+            </button>
+
+            <button
+                onClick={()=>setQuestion("Give real-world examples")}
+                className="bg-slate-800 hover:bg-slate-700 px-4 py-2 rounded-full"
+            >
+                💡 Real Examples
+            </button>
+
         </div>
-      )}
+
     </div>
-  );
+
+    <button
+    onClick={askDoubt}
+    disabled={loading}
+    className="mt-8 w-full bg-gradient-to-r from-cyan-500 to-purple-600 py-4 rounded-xl font-bold hover:scale-[1.02] transition disabled:opacity-60 disabled:cursor-not-allowed"
+>
+    {loading ? "🤖 Thinking..." : "🚀 Ask AI"}
+</button>
+
+    {answer && (
+
+        <div className="mt-8 bg-slate-800 rounded-2xl p-6">
+
+            <h3 className="font-bold mb-3">
+                AI Response
+            </h3>
+
+            <p className="leading-8 text-slate-300 whitespace-pre-wrap">
+                {answer}
+            </p>
+
+        </div>
+
+    )}
+
+</div>
+
+);
 }
 
 export default AITutor;
