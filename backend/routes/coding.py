@@ -6,16 +6,16 @@ from database.database import get_db
 from database.models import User
 from firebase_auth import verify_token
 
-from services.gemini_service import get_model
 from services.ai_usage_service import (
     check_ai_limit,
     increase_ai_usage
 )
-from services.stats_service import add_xp
 
-from schemas.interview import (
-    InterviewRequest,
-    EvaluationRequest
+from services.gemini_service import get_model
+
+from schemas.coding import (
+    CodingQuestionRequest,
+    CodeEvaluationRequest
 )
 
 router = APIRouter()
@@ -23,9 +23,13 @@ router = APIRouter()
 model = get_model()
 
 
-@router.post("/generate-interview-question")
+# ==========================
+# Generate Coding Question
+# ==========================
+
+@router.post("/generate-coding-question")
 def generate_question(
-    data: InterviewRequest,
+    data: CodingQuestionRequest,
     authorization: str = Header(None),
     db: Session = Depends(get_db)
 ):
@@ -64,7 +68,9 @@ def generate_question(
         )
 
     prompt = f"""
-You are a Senior Software Engineer conducting a technical interview.
+You are a FAANG interviewer.
+
+Generate ONE coding interview question.
 
 Topic:
 {data.topic}
@@ -72,18 +78,25 @@ Topic:
 Difficulty:
 {data.difficulty}
 
-Generate ONE interview question.
-
 Return ONLY valid JSON.
 
 {{
-    "question":"..."
+    "title":"Two Sum",
+    "difficulty":"Easy",
+    "description":"Given an array...",
+    "examples":["Input: ... Output: ..."],
+    "constraints":["1 <= n <= 100000"]
 }}
 """
 
     try:
 
         response = model.generate_content(prompt)
+
+        remaining = increase_ai_usage(
+            db,
+            firebase_uid
+        )
 
         text = response.text.strip()
 
@@ -93,18 +106,6 @@ Return ONLY valid JSON.
             text = text.strip()
 
         result = json.loads(text)
-
-        remaining = increase_ai_usage(
-            db,
-            firebase_uid
-        )
-
-        add_xp(
-            db,
-            firebase_uid,
-            xp=20,
-            ai=1
-        )
 
         result["remaining"] = remaining
 
@@ -117,9 +118,13 @@ Return ONLY valid JSON.
         }
 
 
-@router.post("/evaluate-answer")
-def evaluate_answer(
-    data: EvaluationRequest,
+# ==========================
+# Evaluate Code
+# ==========================
+
+@router.post("/evaluate-code")
+def evaluate_code(
+    data: CodeEvaluationRequest,
     authorization: str = Header(None),
     db: Session = Depends(get_db)
 ):
@@ -158,42 +163,47 @@ def evaluate_answer(
         )
 
     prompt = f"""
-You are a Senior Software Engineer conducting a technical interview.
+You are a Senior Software Engineer at Google.
+
+Evaluate this coding interview solution.
 
 Topic:
 {data.topic}
 
-Current Question:
+Programming Language:
+{data.language}
+
+Question:
 {data.question}
 
-Candidate Answer:
-{data.answer}
+Candidate Code:
 
-Evaluate the answer.
-
-Then ask ONE NEW interview question that naturally follows.
+{data.code}
 
 Return ONLY valid JSON.
 
 {{
-    "score":8,
-    "strengths":[
-        "...",
-        "..."
+    "score": 8,
+    "time_complexity": "O(n)",
+    "space_complexity": "O(n)",
+    "strengths": [
+        "Good use of HashMap"
     ],
-    "weaknesses":[
-        "...",
-        "..."
+    "weaknesses": [
+        "Variable names could be clearer"
     ],
-    "ideal_answer":"...",
-    "interview_tip":"...",
-    "next_question":"..."
+    "optimization": "This solution is already optimal."
 }}
 """
 
     try:
 
         response = model.generate_content(prompt)
+
+        remaining = increase_ai_usage(
+            db,
+            firebase_uid
+        )
 
         text = response.text.strip()
 
@@ -203,18 +213,6 @@ Return ONLY valid JSON.
             text = text.strip()
 
         result = json.loads(text)
-
-        remaining = increase_ai_usage(
-            db,
-            firebase_uid
-        )
-
-        add_xp(
-            db,
-            firebase_uid,
-            xp=20,
-            ai=1
-        )
 
         result["remaining"] = remaining
 

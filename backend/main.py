@@ -26,6 +26,14 @@ from routes.interview import router as interview_router
 from routes.interview_history import router as interview_history_router
 from routes.interview_history_view import router as interview_history_view_router
 from routes.resume import router as resume_router
+from routes.coding import router as coding_router
+from routes.profile import router as profile_router
+from routes.profile_photo import router as profile_photo_router
+from routes.stats import router as stats_router
+from routes.chat_history import router as chat_router
+from routes.flashcards import router as flashcard_router
+from routes.analytics import router as analytics_router
+from routes.ai_usage import router as ai_usage_router
 
 
 import json
@@ -33,6 +41,7 @@ import json
 model = get_model()
 
 app = FastAPI()
+
 
 app.add_middleware(
     CORSMiddleware,
@@ -51,14 +60,23 @@ app.mount(
     name="courses"
 )
 
+app.mount(
+    "/uploads",
+    StaticFiles(directory="uploads"),
+    name="uploads"
+)
+
 app.include_router(course_router)
 print("✅ Course router included")
 
 app.include_router(video_router)
 print("✅ Video router included")
 
+app.include_router(ai_usage_router)
+
 app.include_router(auth_router)
 app.include_router(progress_router)
+app.include_router(profile_router)
 app.include_router(certificate_router)
 app.include_router(study_plan_router)
 app.include_router(dashboard_router)
@@ -71,6 +89,14 @@ app.include_router(interview_router)
 app.include_router(interview_history_router)
 app.include_router(interview_history_view_router)
 app.include_router(resume_router)
+app.include_router(coding_router)
+app.include_router(profile_photo_router)
+app.include_router(stats_router)
+app.include_router(chat_router)
+app.include_router(flashcard_router)
+app.include_router(analytics_router)
+
+
 
 # CORS
 

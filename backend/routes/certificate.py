@@ -1,16 +1,12 @@
 from fastapi import APIRouter, Depends, Header, HTTPException
 from fastapi.responses import FileResponse
 from sqlalchemy.orm import Session
-
 from database.database import get_db
 from database.models import User, Course, Progress
-
 from firebase_auth import verify_token
-
 from services.certificate_service import generate_certificate
 
 router = APIRouter()
-
 
 @router.get("/certificate/{course_id}")
 def download_certificate(
@@ -51,23 +47,22 @@ def download_certificate(
             status_code=404,
             detail="Course not found"
         )
-
     progress = db.query(Progress).filter(
         Progress.course_id == course.id,
         Progress.user_id == user.id
     ).first()
-
     if progress is None or progress.completed_week < 10:
         raise HTTPException(
             status_code=400,
             detail="Complete the course first."
         )
-
+    
+    print("User Name =", user.name)
+    print("Email =", user.email)
     filepath = generate_certificate(
-        user.name,
-        course.title
-    )
-
+    student_name=user.name,
+    course_name=course.title
+)
     return FileResponse(
         filepath,
         media_type="application/pdf",

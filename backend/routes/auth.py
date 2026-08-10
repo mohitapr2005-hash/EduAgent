@@ -30,8 +30,14 @@ def login(data: LoginRequest, db: Session = Depends(get_db)):
         )
 
         db.add(user)
-        db.commit()
-        db.refresh(user)
+
+    else:
+        # Update latest information every login
+        user.email = data.email
+        user.name = data.name
+
+    db.commit()
+    db.refresh(user)
 
     return {
         "success": True,

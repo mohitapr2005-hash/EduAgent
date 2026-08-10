@@ -3,6 +3,7 @@ from sqlalchemy import (
     Integer,
     String,
     DateTime,
+    Date,
     ForeignKey,
     Text
 )
@@ -221,4 +222,102 @@ class Interview(Base):
     created_at = Column(
         DateTime(timezone=True),
         server_default=func.now()
+    )
+
+    # ==========================
+# USER PROFILE
+# ==========================
+
+
+
+class Profile(Base):
+    __tablename__ = "profiles"
+
+    id = Column(Integer, primary_key=True)
+
+    firebase_uid = Column(
+        String,
+        unique=True,
+        nullable=False
+    )
+
+    full_name = Column(String)
+    university = Column(String)
+    target_company = Column(String)
+    github = Column(String)
+    linkedin = Column(String)
+    skills = Column(Text)
+    bio = Column(Text)
+    photo_url = Column(Text)
+
+
+
+class UserStats(Base):
+    __tablename__ = "user_stats"
+
+    id = Column(Integer, primary_key=True, index=True)
+
+    firebase_uid = Column(String, unique=True, index=True)
+
+    courses = Column(Integer, default=0)
+    lessons_completed = Column(Integer, default=0)
+    quizzes = Column(Integer, default=0)
+    ai_questions = Column(Integer, default=0)
+    coding_interviews = Column(Integer, default=0)
+    resume_checks = Column(Integer, default=0)
+
+    xp = Column(Integer, default=0)
+    coins = Column(Integer, default=0)
+    level = Column(Integer, default=1)
+    streak = Column(Integer, default=0)
+
+
+class ChatHistory(Base):
+    __tablename__ = "chat_history"
+
+    id = Column(Integer, primary_key=True, index=True)
+
+    firebase_uid = Column(String, index=True)
+
+    question = Column(Text)
+
+    answer = Column(Text)
+
+    created_at = Column(
+        DateTime(timezone=True),
+        server_default=func.now()
+    )
+
+
+    from sqlalchemy import Date
+
+class AIUsage(Base):
+    __tablename__ = "ai_usage"
+
+    id = Column(Integer, primary_key=True, index=True)
+
+    user_id = Column(
+        Integer,
+        ForeignKey("users.id"),
+        nullable=False
+    )
+
+    feature = Column(
+        String,
+        nullable=False
+    )
+
+    used_count = Column(
+        Integer,
+        default=0
+    )
+
+    daily_limit = Column(
+        Integer,
+        nullable=False
+    )
+
+    last_reset = Column(
+        Date,
+        nullable=False
     )

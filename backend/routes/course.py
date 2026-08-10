@@ -1,6 +1,12 @@
 from database.database import get_db
 from database.models import User, Course
 from database.crud import create_course, get_user_courses
+from services.stats_service import add_xp
+
+from services.ai_usage_service import (
+    check_ai_limit,
+    increase_ai_usage
+)
 
 from sqlalchemy.orm import Session
 
@@ -13,6 +19,8 @@ from schemas.course import CourseRequest
 from services.gemini_service import get_model
 
 import json
+
+
 
 print("🚀 COURSE ROUTE LOADED")
 
@@ -52,7 +60,16 @@ def generate_course(
             detail="User not found"
         )
 
-    print(decoded)
+    allowed, remaining = check_ai_limit(
+        db,
+        firebase_uid
+    )
+
+    if not allowed:
+        raise HTTPException(
+            status_code=429,
+            detail="Daily AI limit reached."
+        )
 
     prompt = f"""
 Create a 10-week roadmap for:
@@ -85,19 +102,32 @@ Return ONLY valid JSON:
         text = text.strip()
 
     roadmap = json.loads(text)
-    course=create_course(
-    db=db,
-    user_id=user.id,
-    title=roadmap["title"],
-    description=f"AI generated course on {data.topic}",
-    roadmap=roadmap
+    course = create_course(
+        db=db,
+        user_id=user.id,
+        title=roadmap["title"],
+        description=f"AI generated course on {data.topic}",
+        roadmap=roadmap
+    )
+
+    remaining = increase_ai_usage(
+    db,
+    firebase_uid
 )
-    
+
+    add_xp(
+        db,
+        user.firebase_uid,
+        xp=50,
+        coins=5,
+        courses=1
+    )
 
     return {
-        "course_id": course.id,
-        "roadmap": roadmap
-    }
+    "course_id": course.id,
+    "roadmap": roadmap,
+    "remaining": remaining
+}
 
 @router.get("/my-courses")
 def my_courses(
@@ -166,6 +196,8 @@ def get_course(
         Course.user_id == user.id
     ).first()
 
+   
+
     if course is None:
         raise HTTPException(
             status_code=404,
@@ -176,3 +208,48 @@ def get_course(
 
 
 print("Course router routes:", router.routes)
+@router.delete("/course/{course_id}")
+def delete_course(
+    course_id: int,
+    authorization: str = Header(None),
+    db: Session = Depends(get_db)
+):
+
+    if not authorization:
+        raise HTTPException(
+            status_code=401,
+            detail="Authorization header missing"
+        )
+
+    token = authorization.replace("Bearer ", "")
+    decoded = verify_token(token)
+
+    firebase_uid = decoded["uid"]
+
+    user = db.query(User).filter(
+        User.firebase_uid == firebase_uid
+    ).first()
+
+    if user is None:
+        raise HTTPException(
+            status_code=404,
+            detail="User not found"
+        )
+
+    course = db.query(Course).filter(
+        Course.id == course_id,
+        Course.user_id == user.id
+    ).first()
+
+    if course is None:
+        raise HTTPException(
+            status_code=404,
+            detail="Course not found"
+        )
+
+    db.delete(course)
+    db.commit()
+
+    return {
+        "message": "Course Deleted Successfully"
+    }

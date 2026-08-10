@@ -52,6 +52,8 @@ def complete_week(
         "success": True
     }
 
+
+
 @router.get("/progress/{course_id}")
 def get_progress(
     course_id: int,
