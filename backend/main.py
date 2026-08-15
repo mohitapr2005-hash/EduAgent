@@ -63,7 +63,7 @@ app.mount(
 
 app.mount(
     "/uploads",
-    StaticFiles(directory="uploads"),
+    StaticFiles(directory=os.path.join(os.path.dirname(__file__), "uploads")),
     name="uploads"
 )
 
