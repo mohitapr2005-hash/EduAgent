@@ -34,6 +34,7 @@ from routes.chat_history import router as chat_router
 from routes.flashcards import router as flashcard_router
 from routes.analytics import router as analytics_router
 from routes.ai_usage import router as ai_usage_router
+import os
 
 
 import json
@@ -56,7 +57,7 @@ app.add_middleware(
 
 app.mount(
     "/courses",
-    StaticFiles(directory="courses"),
+    StaticFiles(directory=os.path.join(os.path.dirname(__file__), "courses")),
     name="courses"
 )
 
