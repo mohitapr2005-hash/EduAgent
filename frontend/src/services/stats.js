@@ -1,4 +1,4 @@
-const API = "http://127.0.0.1:8000";
+const API = "https://eduagent-ugdl.onrender.com";
 
 export const getStats = async (uid) => {
 

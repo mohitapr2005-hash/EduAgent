@@ -1,4 +1,4 @@
-const API = "http://127.0.0.1:8000";
+const API = "https://eduagent-ugdl.onrender.com";
 
 export const getAnalytics = async (uid) => {
 
@@ -10,7 +10,7 @@ export const getAnalytics = async (uid) => {
 
 import { auth } from "../firebase/firebase";
 
-const BASE_URL = "http://127.0.0.1:8000";
+const BASE_URL = "https://eduagent-ugdl.onrender.com";
 
 export const getAIUsage = async () => {
 

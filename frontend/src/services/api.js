@@ -1,7 +1,7 @@
 import axios from "axios";
 import { auth } from "../firebase/firebase";
 
-const BASE_URL = "http://127.0.0.1:8000";
+const BASE_URL = "https://eduagent-ugdl.onrender.com";
 
 export const generateCourseAPI = async (topic) => {
 
@@ -134,7 +134,7 @@ export const getMyCoursesAPI = async () => {
 
   const token = await auth.currentUser.getIdToken();
 
-  const response = await fetch("http://127.0.0.1:8000/my-courses", {
+  const response = await fetch("https://eduagent-ugdl.onrender.com/my-courses", {
     headers: {
       Authorization: `Bearer ${token}`,
     },

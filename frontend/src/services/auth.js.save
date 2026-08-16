@@ -1,3 +1,6 @@
+grep -R "https://" src --exclude="*.css"
+
+^X
 import {
   signInWithPopup,
   GoogleAuthProvider,
@@ -14,7 +17,7 @@ import { auth } from "../firebase/firebase";
 
 const provider = new GoogleAuthProvider();
 
-const BACKEND_URL = "https://eduagent-ugdl.onrender.com";
+const BACKEND_URL = "http://127.0.0.1:8000";
 
 async function syncUserToBackend(user) {
   const response = await fetch(`${BACKEND_URL}/auth/login`, {
@@ -37,8 +40,7 @@ async function syncUserToBackend(user) {
 }
 
 export const googleLogin = async () => {
-  const result = await signInWithPopup(auth, provider);
-
+  const result = await signInWithPopup(au
   await syncUserToBackend(result.user);
 
   return result;

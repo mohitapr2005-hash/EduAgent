@@ -1,5 +1,5 @@
 
-const API = "http://127.0.0.1:8000";
+const API = "https://eduagent-ugdl.onrender.com";
 
 export const saveProfile = async (uid, data) => {
 
@@ -34,7 +34,7 @@ export const uploadProfilePhoto = async (file) => {
     formData.append("file", file);
 
     const res = await fetch(
-        "http://127.0.0.1:8000/upload-profile-photo",
+        "https://eduagent-ugdl.onrender.com/upload-profile-photo",
         {
             method: "POST",
             body: formData
