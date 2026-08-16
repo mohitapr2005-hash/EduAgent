@@ -1,0 +1,148 @@
+{
+    "title": "Week 1: Introduction to Computer Networks",
+    "estimated_duration": "10 Minutes",
+    "learning_objectives": [
+        "Define what a computer network is in simple terms.",
+        "Explain the primary reasons for using computer networks.",
+        "Identify the basic components that make up a computer network.",
+        "Distinguish between Local Area Networks (LANs) and Wide Area Networks (WANs)."
+    ],
+    "scenes": [
+        {
+            "scene": 1,
+            "title": "Welcome to Computer Networks!",
+            "slide_title": "What is a Computer Network?",
+            "bullet_points": [
+                "Two or more computers connected",
+                "Share resources and information",
+                "Communicate with each other"
+            ],
+            "narration": "Hello everyone, and welcome to our first lesson on Computer Networks! Think about your daily life. You're constantly connected, right? A computer network is simply a group of two or more computers, or other smart devices, that are linked together. The main goal? To allow them to share things and talk to each other. It's like a digital meeting place for machines!",
+            "image_prompt": "An illustration showing two desktop computers connected by a cable, with speech bubbles indicating data transfer between them.",
+            "duration": 35
+        },
+        {
+            "scene": 2,
+            "title": "Why Networks? - Sharing Resources",
+            "slide_title": "Why Do We Need Networks?",
+            "bullet_points": [
+                "Share hardware (e.g., printers)",
+                "Share software applications",
+                "Save money and increase efficiency"
+            ],
+            "narration": "So, why bother connecting all these devices? One big reason is sharing resources. Imagine an office where every employee needs their own printer. That would be expensive and messy! With a network, multiple people can share one printer. It's also great for sharing software licenses or even a powerful server that many users can access. It makes things much more efficient and saves costs.",
+            "image_prompt": "An illustration of multiple office workers at their computers, all connected to a single shared printer and a central server via a network.",
+            "duration": 38
+        },
+        {
+            "scene": 3,
+            "title": "Why Networks? - Sharing Information",
+            "slide_title": "Sharing Information & Communication",
+            "bullet_points": [
+                "Access shared files and documents",
+                "Send emails and instant messages",
+                "Browse websites and stream content"
+            ],
+            "narration": "Beyond hardware, networks let us share information instantly. Think about sending an email, checking social media, or even looking up information on the web. All of these activities rely on networks. We can access shared documents on a school server, collaborate on projects, or simply chat with friends across the globe. Networks make our world feel much smaller and more connected.",
+            "image_prompt": "An illustration showing people collaborating on a document across different devices (laptop, tablet, phone), with arrows indicating data flow and communication.",
+            "duration": 38
+        },
+        {
+            "scene": 4,
+            "title": "Basic Network Components: End Devices",
+            "slide_title": "Network Components: End Devices",
+            "bullet_points": [
+                "Computers (desktops, laptops)",
+                "Smartphones and tablets",
+                "Servers (centralized computers)"
+            ],
+            "narration": "Now, let's look at what makes up a network. First, we have the 'end devices' \u2013 these are the things we actually use. Your laptop, your smartphone, a desktop computer, or even a smart TV are all end devices. They are the sources and destinations of information on the network. Think of them as the people in our meeting place.",
+            "image_prompt": "An illustration showing various end devices: a desktop computer, a laptop, a smartphone, and a tablet, all with small network connection icons.",
+            "duration": 30
+        },
+        {
+            "scene": 5,
+            "title": "Basic Network Components: Connecting Media",
+            "slide_title": "Network Components: The Connections",
+            "bullet_points": [
+                "Cables (e.g., Ethernet)",
+                "Wireless signals (Wi-Fi)",
+                "Fiber optics"
+            ],
+            "narration": "Next, we need ways to connect these devices. This is where 'connecting media' comes in. It's the physical path the information travels. This can be cables, like the Ethernet cable connecting your computer to a router, or it can be wireless, like the Wi-Fi you use at home or school. Imagine these as the roads or airwaves information uses to travel.",
+            "image_prompt": "An illustration showing a coiled Ethernet cable next to a representation of Wi-Fi signals radiating from an access point, with small data packets moving along both.",
+            "duration": 35
+        },
+        {
+            "scene": 6,
+            "title": "Basic Network Components: Network Devices",
+            "slide_title": "Network Components: Traffic Controllers",
+            "bullet_points": [
+                "Routers (direct traffic)",
+                "Switches (connect devices in a local area)",
+                "Access Points (for Wi-Fi)"
+            ],
+            "narration": "Finally, we have 'network devices' that help manage the flow of information. Think of them as traffic controllers. A router, like the one in your home, directs data between different networks, like your home network and the internet. A switch connects multiple devices within a single local network. And a Wi-Fi access point allows devices to connect wirelessly. They make sure data gets where it needs to go.",
+            "image_prompt": "An illustration depicting a router with multiple cables and Wi-Fi signals, a switch with several devices connected, and data packets flowing through them.",
+            "duration": 38
+        },
+        {
+            "scene": 7,
+            "title": "Types of Networks: Local Area Network (LAN)",
+            "slide_title": "Network Types: LAN",
+            "bullet_points": [
+                "Small geographical area",
+                "Home, office, school campus",
+                "Fast data transfer"
+            ],
+            "narration": "Networks come in different sizes. A Local Area Network, or LAN, connects devices within a small, limited area. Your home network, a school computer lab, or an office building typically uses a LAN. Devices on a LAN can communicate very quickly because they're physically close to each other. It's like a small community where everyone knows each other.",
+            "image_prompt": "An illustration showing a small office or home with several computers, a printer, and a router, all connected within a confined space, labeled 'LAN'.",
+            "duration": 30
+        },
+        {
+            "scene": 8,
+            "title": "Types of Networks: Wide Area Network (WAN)",
+            "slide_title": "Network Types: WAN",
+            "bullet_points": [
+                "Large geographical area",
+                "Connects multiple LANs",
+                "The Internet is a WAN"
+            ],
+            "narration": "Now, imagine connecting those smaller LANs over vast distances \u2013 that's a Wide Area Network, or WAN. WANs span large geographical areas, connecting cities, states, or even countries. The biggest and most well-known WAN is the Internet itself! When you access a website hosted on a server across the globe, you're using a WAN.",
+            "image_prompt": "An illustration showing two separate LANs (e.g., one in New York, one in London) connected by a cloud representing a WAN, with globe elements in the background.",
+            "duration": 35
+        },
+        {
+            "scene": 9,
+            "title": "How Data Travels: The Packet Idea",
+            "slide_title": "How Data Moves: Packets",
+            "bullet_points": [
+                "Information broken into small 'packets'",
+                "Packets travel independently",
+                "Reassembled at the destination"
+            ],
+            "narration": "When you send a message or request a webpage, your data doesn't just travel as one big chunk. Instead, it's broken down into small pieces called 'packets'. Each packet contains a small part of the data and information about where it's going. These packets travel across the network, sometimes even taking different paths, and then get reassembled back into the original message at the destination. It's like sending a book one page at a time, but much faster!",
+            "image_prompt": "An illustration showing a larger message being broken down into several smaller, labeled 'packets' that then travel along different paths on a network diagram towards a destination device where they are reassembled.",
+            "duration": 40
+        },
+        {
+            "scene": 10,
+            "title": "The Power of Networks: A Connected World",
+            "slide_title": "Impact of Computer Networks",
+            "bullet_points": [
+                "Global communication and collaboration",
+                "Access to vast information",
+                "Foundation of modern technology"
+            ],
+            "narration": "So, as you can see, computer networks are fundamental to our modern world. From sharing a printer in a small office to instant global communication, they enable incredible things. Understanding how networks work is crucial for anyone studying computer science or working with technology today. They truly connect us all and are the backbone of almost everything digital.",
+            "image_prompt": "An illustration showing a diverse group of people from different parts of the world connected by glowing lines to a central network hub, symbolizing global connectivity and collaboration.",
+            "duration": 35
+        }
+    ],
+    "summary": "In this lesson, we introduced computer networks as interconnected devices that share resources and information. We explored why networks are essential, from sharing printers to enabling global communication. We also identified basic components like end devices, connecting media, and network devices, and distinguished between Local Area Networks (LANs) and Wide Area Networks (WANs). Finally, we touched upon how data travels in small pieces called packets.",
+    "assignment": [
+        "In your own words, define what a computer network is and provide two real-life examples of how you use networks daily.",
+        "List and briefly describe the three basic categories of network components we discussed today.",
+        "Imagine you are setting up a network for a small coffee shop. Would this primarily be a LAN or a WAN? Explain why."
+    ]
+}

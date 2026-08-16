@@ -46,7 +46,6 @@ __pycache__/
 backend/certificates/
 
 # Generated course content
-backend/courses/
 
 # Python cache
 __pycache__/

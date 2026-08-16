@@ -1,0 +1,174 @@
+{
+    "title": "Understanding How Networks Work: The OSI Model",
+    "estimated_duration": "10 Minutes",
+    "learning_objectives": [
+        "Explain what network protocols are and why they are important.",
+        "Describe the concept of network layering.",
+        "Identify the seven layers of the OSI model.",
+        "Provide a basic function for each layer of the OSI model."
+    ],
+    "scenes": [
+        {
+            "scene": 1,
+            "title": "Welcome to Week 2: How Devices Communicate",
+            "slide_title": "Network Communication Basics",
+            "bullet_points": [
+                "How do devices 'talk' to each other?",
+                "It's like sending a letter.",
+                "Many steps involved for a message."
+            ],
+            "narration": "Hello everyone, and welcome to week two of Computer Networks! Last week, we learned what networks are. This week, we'll dive deeper into how devices actually communicate across these networks. Think about it: when you send a message, email, or browse a website, how does your computer 'talk' to another? It's much like sending a letter or package, where many steps are involved to get your message from point A to point B.",
+            "image_prompt": "An illustration showing two computers exchanging data packets, with an arrow symbolizing the flow of information between them, resembling a letter being put into a mailbox and then delivered.",
+            "duration": 35
+        },
+        {
+            "scene": 2,
+            "title": "The Rules of Communication: Protocols",
+            "slide_title": "Protocols: Network Rules",
+            "bullet_points": [
+                "Need common 'rules' to understand each other.",
+                "These rules are called Protocols.",
+                "Examples: HTTP for web, SMTP for email."
+            ],
+            "narration": "Just like humans need common rules, like speaking the same language, to understand each other, computers need rules too. In computer networks, these rules are called Protocols. Protocols are simply sets of guidelines that define how data should be formatted, transmitted, and received. For example, when you browse a website, your computer uses the HTTP protocol. When you send an email, it uses SMTP. Without these rules, communication would be chaos!",
+            "image_prompt": "A diagram showing two stylized computers exchanging data. Above them, a thought bubble or sign illustrates a checklist or rulebook labeled 'Protocols' with symbols for handshakes or agreed-upon signals.",
+            "duration": 35
+        },
+        {
+            "scene": 3,
+            "title": "Breaking It Down: The Idea of Layering",
+            "slide_title": "Layering: Simplifying Complexity",
+            "bullet_points": [
+                "Complex tasks are broken into smaller parts.",
+                "Each part handles a specific job.",
+                "Makes troubleshooting easier."
+            ],
+            "narration": "Network communication is very complex, with many different things happening at once. To manage this complexity, engineers came up with the idea of 'layering'. Imagine building a house: you don't just build it all at once. You have separate teams for the foundation, walls, electricity, and plumbing. Each team handles a specific job, and they work together. This makes the whole process more organized and easier to fix if something goes wrong.",
+            "image_prompt": "An illustration depicting a multi-story building under construction, with different levels or floors representing distinct tasks like foundation, walls, and roof, each with workers performing specific jobs.",
+            "duration": 35
+        },
+        {
+            "scene": 4,
+            "title": "Introducing the OSI Model: A Universal Map",
+            "slide_title": "The OSI Model: 7 Layers",
+            "bullet_points": [
+                "OSI stands for Open Systems Interconnection.",
+                "A 7-layer framework for network communication.",
+                "Helps us understand 'how' networks work."
+            ],
+            "narration": "One of the most important layered models in networking is the OSI Model, which stands for Open Systems Interconnection. It's a conceptual framework that divides network communication into seven distinct layers. Think of it as a universal map or a blueprint that helps us understand, design, and troubleshoot how all parts of a network system interact. We'll now explore each of these layers, starting from the one closest to you, the user.",
+            "image_prompt": "A clear, vertical diagram showing seven distinct layers stacked on top of each other, labeled 'Layer 1' to 'Layer 7', with 'OSI Model' as a prominent title.",
+            "duration": 35
+        },
+        {
+            "scene": 5,
+            "title": "Layer 7: The Application Layer (What You See)",
+            "slide_title": "OSI Layer 7: Application",
+            "bullet_points": [
+                "Closest layer to the user.",
+                "Provides network services to applications.",
+                "Examples: Web browsers, email clients."
+            ],
+            "narration": "Let's start at the top with Layer 7, the Application Layer. This is the layer you directly interact with. It provides network services to the applications you use every day. When you open a web browser like Chrome, send an email with Outlook, or chat on a messaging app, you're using services provided by this layer. It's where your data begins its journey, or where it's finally presented to you.",
+            "image_prompt": "An illustration showing a computer screen displaying various application icons like a web browser, email client, and chat app, with an arrow pointing from the screen to a label 'Layer 7: Application'.",
+            "duration": 30
+        },
+        {
+            "scene": 6,
+            "title": "Layer 6: The Presentation Layer (Formatting Data)",
+            "slide_title": "OSI Layer 6: Presentation",
+            "bullet_points": [
+                "Ensures data is readable by recipient.",
+                "Handles data format, encryption, compression.",
+                "Like translating languages or encoding a file."
+            ],
+            "narration": "Moving down to Layer 6, we have the Presentation Layer. This layer is all about making sure the data sent from one device can be understood by the receiving device. It handles things like data formatting, encryption, and compression. For example, if you send an image, this layer ensures it's in a format the other computer can open, like JPEG or PNG. It's like translating a document into a common language before sending it.",
+            "image_prompt": "A diagram showing data packets transforming their appearance (e.g., from raw text to encrypted symbols or compressed files) as they pass through a funnel labeled 'Layer 6: Presentation'.",
+            "duration": 35
+        },
+        {
+            "scene": 7,
+            "title": "Layer 5: The Session Layer (Managing Conversations)",
+            "slide_title": "OSI Layer 5: Session",
+            "bullet_points": [
+                "Manages communication 'sessions'.",
+                "Keeps different conversations separate.",
+                "Starts, manages, and ends sessions."
+            ],
+            "narration": "Next, at Layer 5, is the Session Layer. Think of this layer as the coordinator for your network conversations. When you have multiple tabs open in your browser, or are chatting with several people at once, the Session Layer helps keep those separate conversations organized. It establishes, manages, and terminates the connections between applications, ensuring your chat message doesn't end up in your email, for example.",
+            "image_prompt": "An illustration depicting multiple parallel lines or threads representing different communication sessions, with a central figure or switch directing and managing these distinct paths, labeled 'Layer 5: Session'.",
+            "duration": 35
+        },
+        {
+            "scene": 8,
+            "title": "Layer 4: The Transport Layer (Reliable Delivery)",
+            "slide_title": "OSI Layer 4: Transport",
+            "bullet_points": [
+                "Ensures end-to-end data delivery.",
+                "Handles segmenting, reassembly, error control.",
+                "Like tracking a package delivery."
+            ],
+            "narration": "Now we're at Layer 4, the Transport Layer. This is a crucial layer for reliable end-to-end delivery of data. It breaks your data into smaller 'segments' for easier transmission, and then reassembles them at the other end. If any segments are lost, it asks for them to be resent. Think of it like a reliable postal service that ensures your package not only arrives, but arrives complete and in order, even requesting a re-send if a part goes missing.",
+            "image_prompt": "A diagram showing a large message being broken into smaller numbered segments, then traveling through a network, and reassembling correctly at the destination. A tracking symbol might be present, labeled 'Layer 4: Transport'.",
+            "duration": 35
+        },
+        {
+            "scene": 9,
+            "title": "Layer 3: The Network Layer (Finding the Path)",
+            "slide_title": "OSI Layer 3: Network",
+            "bullet_points": [
+                "Routes data across different networks.",
+                "Uses logical addresses (IP addresses).",
+                "Like a GPS for data packets."
+            ],
+            "narration": "Moving on to Layer 3, the Network Layer. This layer is responsible for routing data packets from a source host to a destination host across possibly multiple networks. It uses logical addresses, like IP addresses, to figure out the best path for your data to travel. Imagine sending a letter, and the postal service figures out the best sequence of cities and sorting centers it needs to pass through to reach its final destination. That's what this layer does for your data.",
+            "image_prompt": "An illustration showing data packets traveling along various paths on a world map, with routers acting as junctions making decisions on the best route, all labeled 'Layer 3: Network'. IP addresses might be subtly visible.",
+            "duration": 35
+        },
+        {
+            "scene": 10,
+            "title": "Layer 2: The Data Link Layer (Local Delivery)",
+            "slide_title": "OSI Layer 2: Data Link",
+            "bullet_points": [
+                "Handles data movement between devices on a local network.",
+                "Uses physical addresses (MAC addresses).",
+                "Detects and corrects local errors."
+            ],
+            "narration": "Down to Layer 2, the Data Link Layer. While the Network Layer deals with routing across different networks, this layer focuses on moving data between devices within the same local network segment. It uses physical addresses, also known as MAC addresses, to identify devices directly connected to each other. It also detects and potentially corrects errors that might occur at this local level, ensuring the data frame arrives intact at the next hop.",
+            "image_prompt": "A diagram showing data frames moving between two directly connected computers or network devices within a single local area network segment, with MAC addresses visible, labeled 'Layer 2: Data Link'.",
+            "duration": 35
+        },
+        {
+            "scene": 11,
+            "title": "Layer 1: The Physical Layer (The Wires and Signals)",
+            "slide_title": "OSI Layer 1: Physical",
+            "bullet_points": [
+                "The actual physical connection.",
+                "Transmits raw bits (0s and 1s).",
+                "Examples: Cables, Wi-Fi signals."
+            ],
+            "narration": "Finally, at the very bottom, we have Layer 1, the Physical Layer. This is the most basic layer, dealing with the actual physical medium of communication. This includes the cables \u2013 like Ethernet cables \u2013 or wireless signals like Wi-Fi. Its job is to transmit raw bits, those 0s and 1s, across the network. It defines the electrical, mechanical, and functional specifications for activating, maintaining, and deactivating the physical link. It's the literal highway for your data!",
+            "image_prompt": "An illustration showing various physical network components like Ethernet cables, Wi-Fi antennas, and network interface cards, with electrical signals or radio waves representing the flow of raw bits, labeled 'Layer 1: Physical'.",
+            "duration": 35
+        },
+        {
+            "scene": 12,
+            "title": "Why Layering Matters: Benefits of the OSI Model",
+            "slide_title": "Benefits of Layering",
+            "bullet_points": [
+                "Breaks complex tasks into manageable pieces.",
+                "Allows different vendors to build compatible systems.",
+                "Easier troubleshooting and updates."
+            ],
+            "narration": "So, why go through all this trouble with seven layers? Layering, especially with models like OSI, offers huge benefits. It breaks down complex network tasks into smaller, more manageable pieces. This means different companies can develop network products, like routers or software, that work together because they all follow the same layered standards. It also makes troubleshooting much easier; if your email isn't working, you can check issues layer by layer to pinpoint the problem. It's all about making networks understandable and interoperable.",
+            "image_prompt": "A conceptual diagram showing a puzzle being assembled, where each puzzle piece represents a network layer fitting perfectly with others, leading to a complete and functional network system. Text bubbles highlight 'Modularity', 'Standardization', 'Troubleshooting'.",
+            "duration": 35
+        }
+    ],
+    "summary": "This lesson introduced how devices communicate over networks, emphasizing the role of protocols as communication rules. We explored the concept of layering to simplify complex tasks and then delved into the seven layers of the OSI model: Application (user interaction), Presentation (data formatting), Session (managing conversations), Transport (reliable delivery), Network (routing across networks), Data Link (local delivery), and Physical (raw bit transmission). Understanding these layers helps in comprehending, designing, and troubleshooting network operations.",
+    "assignment": [
+        "In your own words, describe why network protocols are essential for computer communication.",
+        "Choose any two layers of the OSI model and provide a real-world analogy to explain their function, different from the ones used in the lesson.",
+        "Research and identify one common protocol associated with each of the following OSI layers: Application, Transport, and Network. Briefly explain what each protocol does."
+    ]
+}
