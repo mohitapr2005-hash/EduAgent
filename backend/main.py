@@ -1,3 +1,6 @@
+from database.database import engine
+from database.base import Base
+from database import models
 import firebase_admin_config
 from database.database import get_db
 from sqlalchemy.orm import Session
@@ -42,6 +45,7 @@ import json
 model = get_model()
 
 app = FastAPI()
+Base.metadata.create_all(bind=engine)
 
 
 app.add_middleware(
