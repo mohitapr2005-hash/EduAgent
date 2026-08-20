@@ -1,4 +1,5 @@
-import { getAnalytics, getAIUsage } from "../services/analytics";
+import { getAnalytics } from "../services/analytics";
+import { getAIUsage } from "../services/aiUsage";
 import { logout } from "../services/auth";
 import { useNavigate, Link, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";

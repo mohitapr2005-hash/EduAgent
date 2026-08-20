@@ -185,7 +185,17 @@ export const completeWeekAPI = async (courseId, week) => {
 
 export const getProgressAPI = async (courseId) => {
 
-  const token = await auth.currentUser.getIdToken();
+  if (!courseId) {
+    throw new Error("Course ID is missing");
+  }
+
+  const user = auth.currentUser;
+
+  if (!user) {
+    throw new Error("User is not logged in");
+  }
+
+  const token = await user.getIdToken();
 
   const response = await fetch(
     `${BASE_URL}/progress/${courseId}`,
@@ -195,6 +205,13 @@ export const getProgressAPI = async (courseId) => {
       },
     }
   );
+
+  if (!response.ok) {
+    const text = await response.text();
+    throw new Error(
+      `Progress API failed: ${response.status} ${text}`
+    );
+  }
 
   return await response.json();
 };
