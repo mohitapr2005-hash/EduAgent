@@ -10,9 +10,9 @@ from services.ai_usage_service import (
 
 from sqlalchemy.orm import Session
 
-from fastapi import APIRouter, Header, HTTPException, Depends
+from fastapi import APIRouter, HTTPException, Depends
 
-from firebase_auth import verify_token
+from dependencies.auth import get_current_user
 
 from schemas.course import CourseRequest
 
@@ -34,31 +34,11 @@ print("About to register generate-course")
 @router.post("/generate-course")
 def generate_course(
     data: CourseRequest,
-    authorization: str = Header(None),
+    user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
 
-    if not authorization:
-        raise HTTPException(
-            status_code=401,
-            detail="Authorization header missing"
-        )
-
-    token = authorization.replace("Bearer ", "")
-
-    decoded = verify_token(token)
-
-    firebase_uid = decoded["uid"]
-
-    user = db.query(User).filter(
-        User.firebase_uid == firebase_uid
-    ).first()
-
-    if user is None:
-        raise HTTPException(
-            status_code=404,
-            detail="User not found"
-        )
+    firebase_uid = user.firebase_uid
 
     allowed, remaining = check_ai_limit(
         db,
@@ -131,31 +111,9 @@ Return ONLY valid JSON:
 
 @router.get("/my-courses")
 def my_courses(
-    authorization: str = Header(None),
+    user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
-
-    if not authorization:
-        raise HTTPException(
-            status_code=401,
-            detail="Authorization header missing"
-        )
-
-    token = authorization.replace("Bearer ", "")
-
-    decoded = verify_token(token)
-
-    firebase_uid = decoded["uid"]
-
-    user = db.query(User).filter(
-        User.firebase_uid == firebase_uid
-    ).first()
-
-    if user is None:
-        raise HTTPException(
-            status_code=404,
-            detail="User not found"
-        )
 
     return get_user_courses(
         db,
@@ -165,38 +123,14 @@ def my_courses(
 @router.get("/course/{course_id}")
 def get_course(
     course_id: int,
-    authorization: str = Header(None),
+    user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
-
-    if not authorization:
-        raise HTTPException(
-            status_code=401,
-            detail="Authorization header missing"
-        )
-
-    token = authorization.replace("Bearer ", "")
-
-    decoded = verify_token(token)
-
-    firebase_uid = decoded["uid"]
-
-    user = db.query(User).filter(
-        User.firebase_uid == firebase_uid
-    ).first()
-
-    if user is None:
-        raise HTTPException(
-            status_code=404,
-            detail="User not found"
-        )
 
     course = db.query(Course).filter(
         Course.id == course_id,
         Course.user_id == user.id
     ).first()
-
-   
 
     if course is None:
         raise HTTPException(
@@ -211,30 +145,9 @@ print("Course router routes:", router.routes)
 @router.delete("/course/{course_id}")
 def delete_course(
     course_id: int,
-    authorization: str = Header(None),
+    user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
-
-    if not authorization:
-        raise HTTPException(
-            status_code=401,
-            detail="Authorization header missing"
-        )
-
-    token = authorization.replace("Bearer ", "")
-    decoded = verify_token(token)
-
-    firebase_uid = decoded["uid"]
-
-    user = db.query(User).filter(
-        User.firebase_uid == firebase_uid
-    ).first()
-
-    if user is None:
-        raise HTTPException(
-            status_code=404,
-            detail="User not found"
-        )
 
     course = db.query(Course).filter(
         Course.id == course_id,
