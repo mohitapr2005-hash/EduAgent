@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { login, startGoogleLogin, completeGoogleLogin } from "../services/auth";
+import { useState } from "react";
+import { login, googleLogin } from "../services/auth";
 import { useNavigate, Link } from "react-router-dom";
 import toast from "react-hot-toast";
 
@@ -9,27 +9,6 @@ function Login() {
     const [password, setPassword] = useState("");
     const [loading, setLoading] = useState(false);
     const [googleLoading, setGoogleLoading] = useState(false);
-
-    useEffect(() => {
-        let cancelled = false;
-        const finishGoogleLogin = async () => {
-            try {
-                const result = await completeGoogleLogin();
-                if (result?.user && !cancelled) {
-                    toast.success("Google Login Successful 🎉");
-                    navigate("/", { replace: true });
-                }
-            } catch (error) {
-                if (!cancelled) {
-                    console.error("Google redirect login:", error);
-                    toast.error(error.message || "Google Login failed");
-                    setGoogleLoading(false);
-                }
-            }
-        };
-        finishGoogleLogin();
-        return () => { cancelled = true; };
-    }, [navigate]);
 
     const handleLogin = async () => {
         setLoading(true);
@@ -45,12 +24,17 @@ function Login() {
     };
 
     const handleGoogleLogin = async () => {
+        if (googleLoading || loading) return;
+
         setGoogleLoading(true);
         try {
-            await startGoogleLogin();
+            await googleLogin();
+            toast.success("Google Login Successful 🎉");
+            navigate("/", { replace: true });
         } catch (error) {
             console.error("Google Login Error:", error);
             toast.error(error.message || "Google Login failed");
+        } finally {
             setGoogleLoading(false);
         }
     };
@@ -79,7 +63,7 @@ function Login() {
                         </button>
                         <button onClick={handleGoogleLogin} disabled={googleLoading || loading} className="w-full mt-4 bg-white text-black hover:bg-gray-200 disabled:opacity-60 transition-all duration-300 rounded-xl py-4 font-bold flex items-center justify-center gap-3">
                             <img src="https://www.svgrepo.com/show/475656/google-color.svg" className="w-5 h-5" alt="Google" />
-                            {googleLoading ? "Redirecting to Google..." : "Continue with Google"}
+                            {googleLoading ? "Signing in with Google..." : "Continue with Google"}
                         </button>
                         <p className="text-center text-slate-400 mt-8">Don't have an account?<Link to="/signup" className="text-blue-400 ml-2 hover:underline">Sign Up</Link></p>
                     </div>
