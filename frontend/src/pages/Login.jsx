@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { login, googleLogin } from "../services/auth";
+import { login, googleLogin, startGoogleLogin, completeGoogleLogin } from "../services/auth";
 import { useNavigate, Link } from "react-router-dom";
 import toast from "react-hot-toast";
 import { auth } from "../firebase/firebase";
@@ -12,33 +12,38 @@ function Login() {
     const [googleLoading, setGoogleLoading] = useState(false);
 
     useEffect(() => {
-        if (auth.currentUser) {
-            navigate("/", { replace: true });
-            return;
-        }
-
         let cancelled = false;
 
-        const autoGoogleLogin = async () => {
-            if (cancelled) return;
-            setGoogleLoading(true);
+        const autoLogin = async () => {
             try {
-                await googleLogin();
-                if (!cancelled) {
-                    toast.success("Google Login Successful 🎉");
+                // Complete a Google redirect if we just returned from Google.
+                const result = await completeGoogleLogin();
+                if (result?.user) {
+                    if (!cancelled) {
+                        toast.success("Google Login Successful 🎉");
+                        navigate("/", { replace: true });
+                    }
+                    return;
+                }
+
+                // Already authenticated: go straight to the dashboard.
+                if (auth.currentUser) {
                     navigate("/", { replace: true });
+                    return;
                 }
+
+                // No session: automatically start Google login.
+                if (!cancelled) setGoogleLoading(true);
+                await startGoogleLogin();
             } catch (error) {
-                // User closing/cancelling the Google popup is not an app error.
-                if (!cancelled && error?.code !== "auth/popup-closed-by-user" && error?.code !== "auth/cancelled-popup-request") {
-                    console.error("Google auto-login:", error);
+                if (!cancelled) {
+                    console.error("Automatic Google login:", error);
+                    setGoogleLoading(false);
                 }
-            } finally {
-                if (!cancelled) setGoogleLoading(false);
             }
         };
 
-        autoGoogleLogin();
+        autoLogin();
         return () => { cancelled = true; };
     }, [navigate]);
 
@@ -63,7 +68,6 @@ function Login() {
             navigate("/");
         } catch (error) {
             toast.error(error.message);
-        } finally {
             setGoogleLoading(false);
         }
     };
@@ -78,10 +82,10 @@ function Login() {
                         prepare for interviews, analyze resumes, practice coding and learn faster.
                     </p>
                     <div className="grid grid-cols-2 gap-4 mt-10">
-                        <div className="bg-slate-800 rounded-2xl p-5 hover:bg-slate-700 hover:-translate-y-1 transition-all duration-300 cursor-pointer">📚 AI Generated Courses</div>
-                        <div className="bg-slate-800 rounded-2xl p-5 hover:bg-slate-700 hover:-translate-y-1 transition-all duration-300 cursor-pointer">🤖 Personal AI Tutor</div>
-                        <div className="bg-slate-800 rounded-2xl p-5 hover:bg-slate-700 hover:-translate-y-1 transition-all duration-300 cursor-pointer">💻 Coding Interview Prep</div>
-                        <div className="bg-slate-800 rounded-2xl p-5 hover:bg-slate-700 hover:-translate-y-1 transition-all duration-300 cursor-pointer">📄 ATS Resume Analyzer</div>
+                        <div className="bg-slate-800 rounded-2xl p-5">📚 AI Generated Courses</div>
+                        <div className="bg-slate-800 rounded-2xl p-5">🤖 Personal AI Tutor</div>
+                        <div className="bg-slate-800 rounded-2xl p-5">💻 Coding Interview Prep</div>
+                        <div className="bg-slate-800 rounded-2xl p-5">📄 ATS Resume Analyzer</div>
                     </div>
                 </div>
 
@@ -92,7 +96,7 @@ function Login() {
 
                         {googleLoading && (
                             <div className="mb-5 rounded-xl bg-blue-500/10 border border-blue-500/20 p-3 text-center text-sm text-blue-300">
-                                Opening Google Sign-In…
+                                Redirecting to Google Sign-In…
                             </div>
                         )}
 
