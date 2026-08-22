@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { login, googleLogin, completeGoogleLogin } from "../services/auth";
+import { login, startGoogleLogin, completeGoogleLogin } from "../services/auth";
 import { useNavigate, Link } from "react-router-dom";
 import toast from "react-hot-toast";
 
@@ -23,6 +23,7 @@ function Login() {
                 if (!cancelled) {
                     console.error("Google redirect login:", error);
                     toast.error(error.message || "Google Login failed");
+                    setGoogleLoading(false);
                 }
             }
         };
@@ -35,9 +36,9 @@ function Login() {
         try {
             await login(email, password);
             toast.success(`Welcome back ${email.split("@")[0]} 👋`);
-            navigate("/");
+            navigate("/", { replace: true });
         } catch (error) {
-            toast.error(error.message);
+            toast.error(error.message || "Login failed");
         } finally {
             setLoading(false);
         }
@@ -46,9 +47,7 @@ function Login() {
     const handleGoogleLogin = async () => {
         setGoogleLoading(true);
         try {
-            await googleLogin();
-            toast.success("Google Login Successful 🎉");
-            navigate("/", { replace: true });
+            await startGoogleLogin();
         } catch (error) {
             console.error("Google Login Error:", error);
             toast.error(error.message || "Google Login failed");
@@ -80,7 +79,7 @@ function Login() {
                         </button>
                         <button onClick={handleGoogleLogin} disabled={googleLoading || loading} className="w-full mt-4 bg-white text-black hover:bg-gray-200 disabled:opacity-60 transition-all duration-300 rounded-xl py-4 font-bold flex items-center justify-center gap-3">
                             <img src="https://www.svgrepo.com/show/475656/google-color.svg" className="w-5 h-5" alt="Google" />
-                            {googleLoading ? "Signing in with Google..." : "Continue with Google"}
+                            {googleLoading ? "Redirecting to Google..." : "Continue with Google"}
                         </button>
                         <p className="text-center text-slate-400 mt-8">Don't have an account?<Link to="/signup" className="text-blue-400 ml-2 hover:underline">Sign Up</Link></p>
                     </div>
