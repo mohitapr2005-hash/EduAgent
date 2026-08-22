@@ -1,7 +1,5 @@
 import {
   signInWithPopup,
-  signInWithRedirect,
-  getRedirectResult,
   GoogleAuthProvider,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
@@ -27,23 +25,22 @@ async function syncUserToBackend(user) {
     }),
   });
 
-  if (!response.ok) throw new Error("Failed to sync user with backend");
+  if (!response.ok) {
+    let detail = "Failed to sync user with backend";
+    try {
+      const data = await response.json();
+      detail = data.detail || detail;
+    } catch {
+      // Keep the default message when the backend response is not JSON.
+    }
+    throw new Error(detail);
+  }
+
   return response.json();
 }
 
 export const googleLogin = async () => {
   const result = await signInWithPopup(auth, provider);
-  await syncUserToBackend(result.user);
-  return result;
-};
-
-export const startGoogleLogin = async () => {
-  await signInWithRedirect(auth, provider);
-};
-
-export const completeGoogleLogin = async () => {
-  const result = await getRedirectResult(auth);
-  if (!result?.user) return null;
   await syncUserToBackend(result.user);
   return result;
 };
